@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel & Bits - Lerne wie Computer Bilder speichern</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎨 Pixel & Bits Lernabenteuer</h1>
+            <p>Entdecke, wie Computer Bilder mit Nullen und Einsen speichern!</p>
+        </header>
+
+        <main>
+            <div class="workspace">
+                <!-- Zeichenfläche -->
+                <section class="drawing-area">
+                    <div class="canvas-controls">
+                        <h2>Zeichenfläche</h2>
+                        <div class="control-buttons">
+                            <button id="view-toggle" class="btn-toggle">
+                                <span id="toggle-text">Bit-Ansicht</span>
+                            </button>
+                            <button id="clear-canvas" class="btn-action">Löschen</button>
+                        </div>
+                    </div>
+                    <div class="canvas-container">
+                        <canvas id="pixel-canvas" width="400" height="400"></canvas>
+                        <div id="bit-overlay" class="bit-overlay hidden"></div>
+                    </div>
+                    <div class="canvas-info">
+                        <p>Größe: <span id="canvas-size">8 × 8</span> Pixel</p>
+                        <p>Speicher: <span id="memory-usage">64 Bits</span></p>
+                    </div>
+                    <div class="canvas-actions">
+                        <button id="expand-canvas" class="btn-expand-prominent">
+                            📏 Zeichenfläche vergrößern
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Farbpalette mit integriertem Radiergummi -->
+                <section class="color-palette">
+                    <h2>Werkzeuge & Farben</h2>
+                    
+                    <!-- Radiergummi oben -->
+                    <div class="tool-section">
+                        <button id="eraser-tool" class="btn-eraser">🧽 Radiergummi</button>
+                    </div>
+                    
+                    <!-- Farben darunter -->
+                    <div class="colors-section">
+                        <h3>Farbpalette</h3>
+                        <div class="colors">
+                            <!-- Farben werden dynamisch generiert -->
+                        </div>
+                        
+                        <button id="unlock-colors" class="btn-unlock">
+                            ✨ Mehr Farben freischalten
+                        </button>
+                        
+                        <div class="palette-info">
+                            <p>Verfügbare Farben: <span id="available-colors">2</span></p>
+                            <p>Bits pro Pixel: <span id="bits-per-pixel">1</span></p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Aufgaben/Missionen -->
+            <section class="missions">
+                <h2>🎯 Aktuelle Mission</h2>
+                <div id="current-mission" class="mission-card">
+                    <h3>Mission 1: Erstes Herzchen</h3>
+                    <p>Zeichne ein kleines Herz mit den verfügbaren Farben (Schwarz und Weiß). 
+                       Jeder Pixel wird mit nur 1 Bit gespeichert - das sind 0 für Weiß und 1 für Schwarz!</p>
+                </div>
+                <div class="mission-actions">
+                    <button id="submit-drawing" class="btn-submit">
+                        ✅ Mission einreichen
+                    </button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Quiz Modal -->
+    <div id="quiz-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <img id="mascot" src="Info_Maskotchen.png" alt="Hilfreicher Begleiter" class="mascot">
+                <h3 id="quiz-title">Frage</h3>
+            </div>
+            <div class="modal-body">
+                <p id="quiz-question"></p>
+                <div id="quiz-options" class="quiz-options"></div>
+                <div id="quiz-input" class="quiz-input hidden">
+                    <input type="number" id="quiz-answer" placeholder="Deine Antwort">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="quiz-submit" class="btn-primary">Antworten</button>
+                <button id="quiz-close" class="btn-secondary">Abbrechen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Erfolg Modal -->
+    <div id="success-modal" class="modal hidden">
+        <div class="modal-content success">
+            <div class="modal-header">
+                <img src="Info_Maskotchen.png" alt="Glückwunsch!" class="mascot">
+                <h3>🎉 Toll gemacht!</h3>
+            </div>
+            <div class="modal-body">
+                <p id="success-message"></p>
+            </div>
+            <div class="modal-footer">
+                <button id="success-close" class="btn-primary">Weiter</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

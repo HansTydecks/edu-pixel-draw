@@ -1,0 +1,24 @@
+# Temporäre Dateien
+.DS_Store
+Thumbs.db
+
+# Editor-spezifische Dateien
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node.js (falls später verwendet)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Logs
+*.log
+
+# Cache
+.cache/
+
+# Backup-Dateien
+*.bak
+*.backup
