@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initEventListeners();
     updateUI();
     displayCurrentMission();
-    checkMissionProgress(); // Initialer Check der Mission
+    // checkMissionProgress(); // Entfernt - keine automatische Überprüfung beim Start
 });
 
 function initCanvas() {
@@ -572,24 +572,16 @@ function displayCurrentMission() {
 function checkMissionProgress() {
     const mission = missions[currentMissionIndex];
     
-    // Prüfe ob die Voraussetzungen für die nächste Mission erfüllt sind
+    // Prüfe ob die Voraussetzungen für die aktuelle Mission erfüllt sind
     if (availableColors >= mission.requiredColors && gridSize >= mission.requiredSize) {
         
         // Entferne Highlight von Buttons falls vorhanden
         document.getElementById('unlock-colors').classList.remove('highlight');
         document.getElementById('expand-canvas').classList.remove('highlight');
         
-        // Zeige Success-Message nur wenn sich etwas geändert hat
-        if (!mission.completed) {
-            mission.completed = true;
-            
-            let message = `Perfekt! Du hast jetzt alle Voraussetzungen für "${mission.title}" erfüllt!\n\n`;
-            message += `✅ ${mission.requiredColors} Farben verfügbar\n`;
-            message += `✅ ${mission.requiredSize}×${mission.requiredSize} Zeichenfläche\n\n`;
-            message += `Du kannst jetzt mit der Mission beginnen und sie einreichen wenn du fertig bist!`;
-            
-            showSuccess(message);
-        }
+        // NICHT automatisch als completed markieren - das passiert nur beim Einreichen
+        // Nur eine stille Überprüfung, ob Voraussetzungen erfüllt sind
+        
     } else {
         // Zeige welche Voraussetzungen noch fehlen
         let missingRequirements = [];
@@ -610,13 +602,32 @@ function checkMissionProgress() {
     }
 }
 
+function checkIfMissionRequirementsMet() {
+    const mission = missions[currentMissionIndex];
+    return availableColors >= mission.requiredColors && gridSize >= mission.requiredSize;
+}
+
 function advanceToNextMission() {
     const currentMission = missions[currentMissionIndex];
     
-    if (!currentMission.completed) {
-        showMessage("Du musst erst die Voraussetzungen für diese Mission erfüllen!", "error");
+    // Prüfe ob Voraussetzungen erfüllt sind
+    if (!checkIfMissionRequirementsMet()) {
+        let missingRequirements = [];
+        
+        if (availableColors < currentMission.requiredColors) {
+            missingRequirements.push(`${currentMission.requiredColors} Farben`);
+        }
+        
+        if (gridSize < currentMission.requiredSize) {
+            missingRequirements.push(`${currentMission.requiredSize}×${currentMission.requiredSize} Zeichenfläche`);
+        }
+        
+        showMessage(`Du musst erst die Voraussetzungen erfüllen: ${missingRequirements.join(', ')}`, "error");
         return false;
     }
+    
+    // Mission als abgeschlossen markieren
+    currentMission.completed = true;
     
     if (currentMissionIndex < missions.length - 1) {
         currentMissionIndex++;
