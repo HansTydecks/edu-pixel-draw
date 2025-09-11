@@ -104,9 +104,9 @@ const missions = [
     {
         id: 2,
         title: "Mission 2: Buntes Haus",
-        description: "Zeichne ein Haus mit verschiedenen Farben! Du brauchst mindestens 4 Farben, um alle Details darzustellen.",
+        description: "Zeichne ein Haus mit verschiedenen Farben! Du brauchst eine 16×16 Zeichenfläche und mindestens 4 verschiedene Farben.",
         requiredColors: 4,
-        requiredSize: 8,
+        requiredSize: 16,
         completed: false
     },
     {
@@ -165,6 +165,19 @@ const quizzes = {
             explanation: "8×8 = 64 Pixel, 16×16 = 256 Pixel. 256 ÷ 64 = 4, also 4x mehr Pixel!"
         },
         {
+            question: "Von 16×16 auf 32×32: Wie verändert sich die Pixelanzahl?",
+            type: "multiple",
+            options: ["2x mehr Pixel", "4x mehr Pixel", "8x mehr Pixel", "16x mehr Pixel"],
+            correct: 1,
+            explanation: "16×16 = 256 Pixel, 32×32 = 1024 Pixel. 1024 ÷ 256 = 4x mehr Pixel!"
+        },
+        {
+            question: "Bei einer 64×64 Zeichenfläche: Wie viele Pixel sind das insgesamt?",
+            type: "input",
+            correct: 4096,
+            explanation: "64 × 64 = 4096 Pixel - das ist eine sehr detaillierte Zeichenfläche!"
+        },
+        {
             question: "Wenn jeder Pixel 3 Bits Speicher braucht und du 256 Pixel hast, wie viele Bits Speicher brauchst du insgesamt?",
             type: "input",
             correct: 768,
@@ -186,12 +199,74 @@ function initCanvas() {
     canvas = document.getElementById('pixel-canvas');
     ctx = canvas.getContext('2d');
     
-    pixelSize = canvas.width / gridSize;
+    // Dynamische Canvas-Größe basierend auf Grid-Größe
+    updateCanvasSize();
     
     // Pixeldaten initialisieren
     pixelData = Array(gridSize).fill().map(() => Array(gridSize).fill(0));
     
     drawGrid();
+}
+
+function updateCanvasSize() {
+    // Progressiver Canvas-Größen-Plan:
+    // 8x8:  400px (Basis)
+    // 16x16: 480px (20% größer)
+    // 32x32: 560px (40% größer)
+    // 64x64: 640px (60% größer)
+    const baseSize = 400;
+    
+    let canvasSize;
+    if (gridSize === 8) {
+        canvasSize = baseSize;
+    } else if (gridSize === 16) {
+        canvasSize = Math.floor(baseSize * 1.2); // 480px
+    } else if (gridSize === 32) {
+        canvasSize = Math.floor(baseSize * 1.4); // 560px
+    } else if (gridSize === 64) {
+        canvasSize = Math.floor(baseSize * 1.6); // 640px
+    } else {
+        // Fallback für unerwartete Größen
+        canvasSize = baseSize;
+    }
+    
+    // Canvas-Größe setzen
+    canvas.width = canvasSize;
+    canvas.height = canvasSize;
+    
+    // CSS-Größe auch setzen für konsistente Darstellung
+    canvas.style.width = canvasSize + 'px';
+    canvas.style.height = canvasSize + 'px';
+    
+    // Pixel-Größe neu berechnen
+    pixelSize = canvasSize / gridSize;
+    
+    // Bit-Overlay Größe anpassen
+    const bitOverlay = document.getElementById('bit-overlay');
+    if (bitOverlay) {
+        bitOverlay.style.width = canvasSize + 'px';
+        bitOverlay.style.height = canvasSize + 'px';
+    }
+    
+    // Vergrößern-Button Status aktualisieren
+    updateExpandButtonState();
+    
+    console.log(`Canvas-Größe aktualisiert: ${canvasSize}×${canvasSize}px für ${gridSize}×${gridSize} Grid`);
+}
+
+function updateExpandButtonState() {
+    const expandButton = document.getElementById('expand-canvas');
+    
+    if (gridSize >= 64) {
+        // Bei maximaler Größe: Button deaktivieren und Text ändern
+        expandButton.disabled = true;
+        expandButton.innerHTML = '✅ Maximale Größe erreicht';
+        expandButton.classList.remove('highlight');
+    } else {
+        // Bei nicht-maximaler Größe: Button aktivieren
+        expandButton.disabled = false;
+        expandButton.innerHTML = '📏 Zeichenfläche vergrößern';
+    }
 }
 
 function initEventListeners() {
@@ -384,6 +459,11 @@ function updateBitOverlay() {
     bitOverlay.innerHTML = '';
     bitOverlay.className = `bit-overlay grid-${gridSize}x${gridSize}`;
     
+    // Größe des Bit-Overlays an Canvas anpassen
+    const canvasSize = canvas.width;
+    bitOverlay.style.width = canvasSize + 'px';
+    bitOverlay.style.height = canvasSize + 'px';
+    
     for (let row = 0; row < gridSize; row++) {
         for (let col = 0; col < gridSize; col++) {
             const bitCell = document.createElement('div');
@@ -416,6 +496,7 @@ function updateUI() {
     document.getElementById('available-colors').textContent = availableColors;
     document.getElementById('bits-per-pixel').textContent = bitsPerPixel;
     updateMemoryUsage();
+    updateExpandButtonState();
 }
 
 function unlockColors() {
@@ -432,12 +513,30 @@ function unlockColors() {
 }
 
 function expandCanvas() {
-    if (gridSize >= 16) {
+    const expandButton = document.getElementById('expand-canvas');
+    
+    // Prüfe, ob Button deaktiviert ist
+    if (expandButton.disabled) {
+        return;
+    }
+    
+    if (gridSize >= 64) {
         showMessage("Die maximale Größe ist bereits erreicht!", "info");
         return;
     }
     
-    const quizIndex = gridSize === 8 ? 0 : 1;
+    // Bestimme Quiz-Index basierend auf aktueller Größe
+    let quizIndex;
+    if (gridSize === 8) {
+        quizIndex = 0; // 8×8 → 16×16
+    } else if (gridSize === 16) {
+        quizIndex = 1; // 16×16 → 32×32
+    } else if (gridSize === 32) {
+        quizIndex = 2; // 32×32 → 64×64
+    } else {
+        quizIndex = 0; // Fallback
+    }
+    
     showQuiz('expandCanvas', quizIndex);
 }
 
@@ -537,26 +636,47 @@ function unlockMoreColors() {
 }
 
 function expandCanvasSize() {
+    let oldGridSize = gridSize;
+    let newGridSize;
+    
+    // Bestimme die nächste Größe
     if (gridSize === 8) {
-        gridSize = 16;
-        pixelSize = canvas.width / gridSize;
-        
-        // Neue Pixeldaten-Matrix
-        const newPixelData = Array(gridSize).fill().map(() => Array(gridSize).fill(0));
-        
-        // Alte Daten in die obere linke Ecke kopieren
-        for (let row = 0; row < Math.min(8, gridSize); row++) {
-            for (let col = 0; col < Math.min(8, gridSize); col++) {
-                newPixelData[row][col] = pixelData[row][col];
-            }
-        }
-        
-        pixelData = newPixelData;
-        drawGrid();
-        updateUI();
-        updateBitOverlay();
-        checkMissionProgress();
+        newGridSize = 16;
+    } else if (gridSize === 16) {
+        newGridSize = 32;
+    } else if (gridSize === 32) {
+        newGridSize = 64;
+    } else {
+        // Bereits bei maximaler Größe
+        showError('🔒 Maximale Zeichenflächen-Größe bereits erreicht!\n\n✨ Du hast die größte verfügbare Zeichenfläche von 64×64 Pixeln.');
+        return;
     }
+    
+    gridSize = newGridSize;
+    
+    // Canvas-Größe aktualisieren BEVOR pixelSize neu berechnet wird
+    updateCanvasSize();
+    
+    // Neue Pixeldaten-Matrix
+    const newPixelData = Array(gridSize).fill().map(() => Array(gridSize).fill(0));
+    
+    // Alte Daten in die obere linke Ecke kopieren
+    for (let row = 0; row < Math.min(oldGridSize, gridSize); row++) {
+        for (let col = 0; col < Math.min(oldGridSize, gridSize); col++) {
+            newPixelData[row][col] = pixelData[row][col];
+        }
+    }
+    
+    pixelData = newPixelData;
+    drawGrid();
+    updateUI();
+    updateBitOverlay();
+    checkMissionProgress();
+    
+    // Zeige eine Bestätigung der Vergrößerung
+    setTimeout(() => {
+        showSuccess(`🎉 Zeichenfläche erfolgreich vergrößert!\n\n📏 Neue Größe: ${gridSize}×${gridSize} Pixel\n📊 Mehr Platz für detaillierte Kunstwerke!`);
+    }, 500);
 }
 
 function displayCurrentMission() {
@@ -669,9 +789,10 @@ function closeSuccess() {
     document.getElementById('success-modal').classList.add('hidden');
 }
 
-function showMessage(message, type) {
-    // Einfache Nachricht anzeigen (kann später erweitert werden)
-    alert(message);
+function showMessage(message, type, title = null) {
+    // Verwende einen benutzerdefinierten Titel falls angegeben
+    const displayMessage = title ? `${title}\n\n${message}` : message;
+    alert(displayMessage);
 }
 
 function showAnalysisAnimation() {
@@ -714,11 +835,130 @@ function showAnalysisAnimation() {
     
     setTimeout(() => {
         document.body.removeChild(modal);
-        completeMission();
+        evaluateMission();
     }, 4500);
 }
 
-function completeMission() {
+function evaluateMission() {
+    const currentMission = missions[currentMissionIndex];
+    let analysis = analyzePicture();
+    
+    // Prüfe spezifische Mission-Kriterien
+    let passed = false;
+    let feedbackMessage = "";
+    
+    if (currentMissionIndex === 0) {
+        // Mission 1: Erstes Herzchen - mindestens 5 schwarze Pixel
+        if (analysis.blackPixels >= 5) {
+            passed = true;
+            feedbackMessage = `🎉 Perfekt! Byte sieht ein wunderschönes Herzchen mit ${analysis.blackPixels} schwarzen Pixeln. Das wird mit nur ${analysis.blackPixels} Bits gespeichert - sehr effizient!`;
+        } else {
+            feedbackMessage = `🤔 Byte schaut sich dein Bild genau an... Hmm, das Herzchen ist noch etwas schwer zu erkennen. Versuche mindestens 5 schwarze Pixel zu verwenden, um ein klareres Herz zu zeichnen!`;
+        }
+    } else if (currentMissionIndex === 1) {
+        // Mission 2: Buntes Haus - Canvas muss 16x16 sein UND mindestens 4 Farben
+        let issues = [];
+        
+        if (gridSize < 16) {
+            issues.push("🔍 Das Haus braucht mehr Platz für Details! Vergrößere deine Zeichenfläche auf mindestens 16×16 Pixel.");
+        }
+        
+        if (availableColors < 4) {
+            issues.push("🎨 Das Haus ist Byte nicht bunt genug! Schalte mindestens 4 Farben frei, um ein farbenfrohen Haus zu malen.");
+        }
+        
+        if (analysis.usedColors < 3) {
+            issues.push("🌈 Verwende mehr verschiedene Farben! Ein schönes Haus braucht mindestens 3 verschiedene Farben für Wände, Dach und Details.");
+        }
+        
+        if (issues.length === 0) {
+            passed = true;
+            feedbackMessage = `🏠 Wunderbar! Byte ist begeistert von deinem bunten Haus! Du hast ${analysis.usedColors} verschiedene Farben verwendet und eine ${gridSize}×${gridSize} Zeichenfläche genutzt. Das Haus sieht sehr detailliert aus!`;
+        } else {
+            feedbackMessage = `🏠 Byte analysiert dein Haus...\n\n${issues.join('\n\n')}\n\nVerbessere diese Punkte und reiche dein Kunstwerk dann erneut ein!`;
+        }
+    } else {
+        // Für andere Missionen: Einfachere Prüfung
+        passed = true;
+        feedbackMessage = `✅ Byte ist zufrieden mit deinem Kunstwerk!`;
+    }
+    
+    if (passed) {
+        completeMissionSuccessfully();
+    } else {
+        showMissionFeedback(feedbackMessage);
+    }
+}
+
+function analyzePicture() {
+    let blackPixels = 0;
+    let colorSet = new Set();
+    let totalPixels = 0;
+    
+    for (let row = 0; row < gridSize; row++) {
+        for (let col = 0; col < gridSize; col++) {
+            const colorIndex = pixelData[row][col];
+            totalPixels++;
+            
+            if (colorIndex === 1) { // Schwarz (Index 1 in der Farbpalette)
+                blackPixels++;
+            }
+            
+            colorSet.add(colorIndex);
+        }
+    }
+    
+    return {
+        blackPixels: blackPixels,
+        usedColors: colorSet.size,
+        totalPixels: totalPixels,
+        uniqueColors: Array.from(colorSet)
+    };
+}
+
+function showMissionFeedback(message) {
+    // Reset submit button
+    const submitBtn = document.getElementById('submit-drawing');
+    submitBtn.disabled = false;
+    submitBtn.textContent = '✅ Mission einreichen';
+    
+    // Erstelle Feedback-Modal im Analysefenster-Stil
+    const modal = document.createElement('div');
+    modal.className = 'modal feedback-modal';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <img src="Info_Maskotchen.png" alt="Byte" class="mascot">
+                <h3>🤖 Byte's Analyse</h3>
+            </div>
+            <div class="modal-body">
+                <p class="feedback-text">${message.replace(/\n/g, '<br>')}</p>
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn-primary" onclick="closeFeedbackModal()">
+                        🔧 Kunstwerk verbessern
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Globale Funktion zum Schließen der Modal
+    window.closeFeedbackModal = function() {
+        document.body.removeChild(modal);
+        delete window.closeFeedbackModal;
+    };
+    
+    // Schließen bei Klick außerhalb der Modal
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            window.closeFeedbackModal();
+        }
+    });
+}
+
+function completeMissionSuccessfully() {
     // Reset submit button
     const submitBtn = document.getElementById('submit-drawing');
     submitBtn.disabled = false;
@@ -726,6 +966,11 @@ function completeMission() {
     
     // Verwende die neue Funktion zum Weiterschalten der Mission
     advanceToNextMission();
+}
+
+function completeMission() {
+    // Diese Funktion wird nicht mehr direkt verwendet
+    completeMissionSuccessfully();
 }
 
 // Keyboard Shortcuts
@@ -764,11 +1009,25 @@ window.addEventListener('resize', function() {
     const container = document.querySelector('.canvas-container');
     const containerWidth = container.clientWidth;
     
-    if (containerWidth < 400) {
+    // Bestimme aktuelle Canvas-Größe basierend auf gridSize
+    let targetSize;
+    if (gridSize === 8) {
+        targetSize = 400;
+    } else if (gridSize === 16) {
+        targetSize = 480;
+    } else if (gridSize === 32) {
+        targetSize = 560;
+    } else if (gridSize === 64) {
+        targetSize = 640;
+    } else {
+        targetSize = 400;
+    }
+    
+    if (containerWidth < targetSize) {
         canvas.style.width = '100%';
         canvas.style.height = 'auto';
     } else {
-        canvas.style.width = '400px';
-        canvas.style.height = '400px';
+        canvas.style.width = targetSize + 'px';
+        canvas.style.height = targetSize + 'px';
     }
 });

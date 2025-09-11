@@ -21,23 +21,24 @@ body {
 /* Header */
 header {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     background: rgba(255, 255, 255, 0.95);
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    padding: 15px 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     backdrop-filter: blur(10px);
 }
 
 header h1 {
-    font-size: 2rem;
+    font-size: 1.75rem;
     color: #4a5568;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 header p {
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: #718096;
+    margin-bottom: 0;
 }
 
 /* Workspace Layout */
@@ -85,6 +86,8 @@ header p {
     display: flex;
     justify-content: center;
     margin-bottom: 15px;
+    min-height: 420px; /* Mindesthöhe für 8x8, maximal 660px für 64x64 */
+    transition: all 0.5s ease; /* Sanfte Animation bei Größenänderung */
 }
 
 #pixel-canvas {
@@ -92,6 +95,7 @@ header p {
     border-radius: 8px;
     cursor: crosshair;
     background: white;
+    transition: all 0.5s ease; /* Sanfte Animation bei Größenänderung */
 }
 
 .bit-overlay {
@@ -99,11 +103,10 @@ header p {
     top: 3px;
     left: 50%;
     transform: translateX(-50%);
-    width: 400px;
-    height: 400px;
     pointer-events: none;
     display: grid;
     border-radius: 5px;
+    transition: all 0.5s ease; /* Sanfte Animation bei Größenänderung */
 }
 
 .bit-cell {
@@ -164,10 +167,11 @@ header p {
 
 .colors {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
-    gap: 8px;
+    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+    gap: 6px;
     margin-bottom: 20px;
-    max-height: 300px;
+    max-height: calc(100vh - 500px); /* Dynamische Höhe basierend auf Viewport */
+    min-height: 250px; /* Mindesthöhe für bessere Nutzung */
     overflow-y: auto;
     padding: 5px;
 }
@@ -176,12 +180,12 @@ header p {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 8px;
+    padding: 6px;
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
     position: relative;
-    min-height: 80px;
+    min-height: 70px;
 }
 
 .color-option:hover {
@@ -195,18 +199,18 @@ header p {
 }
 
 .color-swatch {
-    width: 35px;
-    height: 35px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     border: 2px solid #e2e8f0;
-    margin-bottom: 5px;
+    margin-bottom: 4px;
 }
 
 .color-option span {
-    font-size: 10px;
+    font-size: 9px;
     color: #4a5568;
     text-align: center;
-    line-height: 1.2;
+    line-height: 1.1;
 }
 
 .palette-info {
@@ -272,6 +276,21 @@ header p {
 .btn-expand-prominent.highlight {
     animation: pulse 2s infinite;
     box-shadow: 0 0 20px rgba(56, 161, 105, 0.6);
+}
+
+.btn-expand-prominent:disabled {
+    background: linear-gradient(45deg, #a0aec0, #cbd5e0);
+    color: #718096;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    opacity: 0.6;
+}
+
+.btn-expand-prominent:disabled:hover {
+    background: linear-gradient(45deg, #a0aec0, #cbd5e0);
+    transform: none;
+    box-shadow: none;
 }
 
 .btn-submit {
@@ -425,11 +444,43 @@ header p {
 }
 
 .mascot {
-    width: 60px;
-    height: 60px;
+    width: 120px; /* Größerer Kreis */
+    height: 120px;
     border-radius: 50%;
-    border: 3px solid white;
-    object-fit: cover;
+    border: 4px solid white;
+    object-fit: contain; /* Behält Proportionen bei, zeigt vollständiges Bild */
+    object-position: center; /* Zentriert das Bild */
+    padding: 15px; /* Zusätzlicher Raum um das PNG */
+    background: white; /* Weißer Hintergrund für besseren Kontrast */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    display: block;
+    margin: 0 auto;
+}
+
+/* Success Modal */
+.modal-content.success .mascot {
+    width: 135px; /* Größerer Kreis */
+    height: 135px;
+    border: 5px solid white;
+    padding: 18px; /* Mehr Raum um das PNG */
+    background: white;
+    object-fit: contain;
+    object-position: center;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    animation: celebrateSuccess 2s ease-in-out;
+}
+
+/* Quiz Modal */
+.modal:not(.analysis-modal):not(.feedback-modal) .mascot {
+    width: 128px; /* Größerer Kreis */
+    height: 128px;
+    border: 4px solid white;
+    padding: 16px; /* Raum um das PNG */
+    background: white;
+    object-fit: contain;
+    object-position: center;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.2);
+    animation: gentle-pulse 3s ease-in-out infinite;
 }
 
 .modal-body {
@@ -508,23 +559,42 @@ header p {
         justify-content: center;
     }
     
+    .canvas-container {
+        min-height: 300px;
+    }
+    
     #pixel-canvas {
-        width: 300px;
-        height: 300px;
+        max-width: 90vw;
+        max-height: 90vw;
+        width: auto !important;
+        height: auto !important;
     }
     
     .bit-overlay {
-        width: 300px;
-        height: 300px;
+        max-width: 90vw;
+        max-height: 90vw;
+        width: auto !important;
+        height: auto !important;
     }
     
     .colors {
-        grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
-        max-height: 200px;
+        grid-template-columns: repeat(auto-fit, minmax(55px, 1fr));
+        max-height: calc(100vh - 600px);
+        min-height: 180px;
+        gap: 4px;
+    }
+    
+    header {
+        padding: 12px 15px;
+        margin-bottom: 15px;
     }
     
     header h1 {
-        font-size: 2rem;
+        font-size: 1.5rem;
+    }
+    
+    header p {
+        font-size: 0.95rem;
     }
 }
 
@@ -533,19 +603,39 @@ header p {
         padding: 10px;
     }
     
+    .canvas-container {
+        min-height: 250px;
+    }
+    
     #pixel-canvas {
-        width: 250px;
-        height: 250px;
+        max-width: 85vw;
+        max-height: 85vw;
+        width: auto !important;
+        height: auto !important;
     }
     
     .bit-overlay {
-        width: 250px;
-        height: 250px;
+        max-width: 85vw;
+        max-height: 85vw;
+        width: auto !important;
+        height: auto !important;
     }
     
     .colors {
-        grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
-        max-height: 150px;
+        grid-template-columns: repeat(auto-fit, minmax(45px, 1fr));
+        max-height: calc(100vh - 700px);
+        min-height: 120px;
+        gap: 3px;
+    }
+    
+    .color-option {
+        min-height: 55px;
+        padding: 4px;
+    }
+    
+    .color-swatch {
+        width: 28px;
+        height: 28px;
     }
     
     .canvas-actions {
@@ -571,10 +661,40 @@ header p {
 /* Analysis Modal */
 .analysis-modal .modal-content {
     max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Zentriert alles horizontal */
+}
+
+.analysis-modal .modal-header {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Zentriert Mascot und Titel */
+    justify-content: center;
 }
 
 .analysis-content .mascot {
     animation: bounce 1s infinite;
+    width: 150px !important; /* Erzwinge exakte Breite */
+    height: 150px !important; /* Erzwinge exakte Höhe */
+    min-width: 150px; /* Verhindere Schrumpfung */
+    min-height: 150px; /* Verhindere Schrumpfung */
+    max-width: 150px; /* Verhindere Ausdehnung */
+    max-height: 150px; /* Verhindere Ausdehnung */
+    border-radius: 50% !important; /* Erzwinge Kreisform */
+    border: 5px solid white;
+    padding: 20px; /* Mehr Raum um das PNG */
+    background: white;
+    object-fit: contain; /* Behält PNG-Proportionen */
+    object-position: center;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+    margin: 0 auto 20px auto;
+    display: block;
+    position: relative;
+    z-index: 10;
+    flex-shrink: 0; /* Verhindere Flex-Schrumpfung */
+    aspect-ratio: 1/1; /* Erzwinge 1:1 Verhältnis */
 }
 
 .analysis-progress {
@@ -597,15 +717,92 @@ header p {
     transition: width 0.5s ease;
 }
 
+/* Feedback Modal für Byte's Rückmeldungen */
+.feedback-modal .modal-content {
+    max-width: 450px;
+    border: 3px solid #ed8936; /* Dunkelorange Border */
+    background: linear-gradient(135deg, #fff5f0, #fed7c3); /* Sanfter Orange-Gradient */
+}
+
+.feedback-modal .modal-header {
+    background: linear-gradient(45deg, #ed8936, #dd6b20);
+    color: white;
+    border-radius: 12px 12px 0 0;
+    text-align: center;
+    padding: 20px;
+}
+
+.feedback-modal .modal-header h3 {
+    margin: 10px 0 0 0;
+    font-size: 1.3rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.feedback-modal .mascot {
+    width: 135px; /* Größerer Kreis */
+    height: 135px;
+    border: 5px solid white;
+    padding: 18px; /* Raum um das PNG */
+    background: white;
+    object-fit: contain;
+    object-position: center;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    margin: 0 auto;
+    display: block;
+}
+
+.feedback-modal .modal-body {
+    padding: 25px;
+    background: white;
+    border-radius: 0 0 12px 12px;
+}
+
+.feedback-modal .feedback-text {
+    color: #744210;
+    font-size: 16px;
+    line-height: 1.6;
+    text-align: center;
+    margin: 0;
+}
+
 @keyframes bounce {
     0%, 20%, 50%, 80%, 100% {
-        transform: translateY(0);
+        transform: translateY(0) scale(1, 1); /* Gleichmäßiges Scaling */
     }
     40% {
-        transform: translateY(-10px);
+        transform: translateY(-15px) scale(1, 1); /* Kein Scaling beim Sprung */
     }
     60% {
-        transform: translateY(-5px);
+        transform: translateY(-8px) scale(1, 1); /* Kein Scaling beim Sprung */
+    }
+}
+
+@keyframes gentle-pulse {
+    0%, 100% { 
+        transform: scale(1);
+        box-shadow: 0 5px 18px rgba(0, 0, 0, 0.2);
+    }
+    50% { 
+        transform: scale(1.02);
+        box-shadow: 0 7px 22px rgba(0, 0, 0, 0.25);
+    }
+}
+
+@keyframes celebrateSuccess {
+    0% { 
+        transform: scale(1) rotate(0deg);
+    }
+    25% { 
+        transform: scale(1.1) rotate(-5deg);
+    }
+    50% { 
+        transform: scale(1.15) rotate(5deg);
+    }
+    75% { 
+        transform: scale(1.05) rotate(-2deg);
+    }
+    100% { 
+        transform: scale(1) rotate(0deg);
     }
 }
 
