@@ -95,24 +95,24 @@ const colors = [
 const missions = [
     {
         id: 1,
-        title: "Mission 1: Erstes Herzchen",
-        description: "Zeichne ein kleines Herz mit den verfügbaren Farben (Schwarz und Weiß). Jeder Pixel wird mit nur 1 Bit gespeichert - das sind 0 für Weiß und 1 für Schwarz!",
+        title: "Mission 1: Herz",
+        description: "Zeichne ein Herz. Jeder Pixel wird mit nur 1 Bit gespeichert - das sind 0 für Weiß und 1 für Schwarz!",
         requiredColors: 2,
         requiredSize: 8,
         completed: false
     },
     {
         id: 2,
-        title: "Mission 2: Buntes Haus",
-        description: "Zeichne ein Haus mit verschiedenen Farben! Du brauchst eine 16×16 Zeichenfläche und mindestens 4 verschiedene Farben.",
+        title: "Mission 2: Apfel mit Wurm",
+        description: "Zeichne einen Apfel samt Wurm! Sicher brauchst du für die vielen Details mehr Platz und mehr Farben als Schwarz und Weiß.",
         requiredColors: 4,
         requiredSize: 16,
         completed: false
     },
     {
         id: 3,
-        title: "Mission 3: Große Landschaft",
-        description: "Zeichne eine detaillierte Landschaft! Du brauchst eine größere Zeichenfläche und viele Farben.",
+        title: "Mission 3: Bunter Schmetterling",
+        description: "Zeichne einen Schmetterling! Vermutlich wirst du für die vielen Farben noch mehr Platz benötigen.",
         requiredColors: 8,
         requiredSize: 16,
         completed: false
@@ -125,23 +125,23 @@ let currentMissionIndex = 0;
 const quizzes = {
     moreColors: [
         {
-            question: "Du möchtest 4 Farben verwenden. Wie viele Bits brauchst du pro Pixel, um 4 verschiedene Zustände zu speichern?",
+            question: "Du möchtest also 4 Farben verwenden? Damit ich dir zwei weitere Farben freischalten kann, beantworte mir folgende Frage: Wenn Schwarz und Weiß 1 Bit benötigen, wie viele Bits brauchen wir dann für Schwarz, Weiß, Grün und Rot?",
             type: "multiple",
             options: ["1 Bit", "2 Bits", "3 Bits", "4 Bits"],
             correct: 1,
-            explanation: "Mit 2 Bits kannst du 2² = 4 verschiedene Zustände darstellen: 00, 01, 10, 11"
+            explanation: "Mit 2 Bits kannst du 2x2 = 4 verschiedene Zustände darstellen: 00, 01, 10, 11"
         },
         {
-            question: "Du hast jetzt 8 Farben. Wie viele Bits brauchst du pro Pixel?",
+            question: "Du möchtest jetzt 4 zusätzliche Farben? Also die Zahl an Farben verdoppeln? Auf 8 Farben? Wie viele Bits brauchst du, um 8 Zustände darzustellen?",
             type: "input",
             correct: 3,
-            explanation: "Mit 3 Bits kannst du 2³ = 8 verschiedene Zustände darstellen: 000, 001, 010, 011, 100, 101, 110, 111"
+            explanation: "Mit 3 Bits kannst du 4x2 = 8 verschiedene Zustände darstellen: 000, 001, 010, 011, 100, 101, 110, 111. 4x2 = 2x2x2. Hier siehst du wie sich die Anzahl der Zustände mit jedem zusätzlichen Bit verdoppelt."
         },
         {
             question: "Für 16 Farben benötigst du wie viele Bits pro Pixel?",
             type: "input",
             correct: 4,
-            explanation: "Mit 4 Bits kannst du 2⁴ = 16 verschiedene Zustände darstellen!"
+            explanation: "Mit 4 Bits kannst du 2x2x2x2 = 16 verschiedene Zustände (Farben) darstellen!"
         },
         {
             question: "Wenn du 32 Farben haben möchtest, wie viele Bits pro Pixel brauchst du?",
@@ -771,7 +771,7 @@ function advanceToNextMission() {
         return true;
         
     } else {
-        showSuccess(`🎉 ALLE MISSIONEN ABGESCHLOSSEN! 🎉\n\nGlückwunsch! Du verstehst jetzt perfekt, wie Computer Bilder mit Bits speichern!\n\n• Du kennst den Zusammenhang zwischen Bits und Farben\n• Du weißt, wie sich Speicher berechnet\n• Du hast das Binärsystem verstanden\n\nDu bist ein echter Pixel-Profi geworden!`);
+        showSuccess(`Alle Missionen abgeschlossen! 🎉\n\nGlückwunsch! Dir ist es nun klarer, wie Computer Bilder mit Bits speichern!\n\n• Du kennst den Zusammenhang zwischen Bits und Farben\n• Du weißt, wie sich Speicher berechnet\n• Du hast das Binärsystem verstanden\n\nDu bist ein echter Pixel-Profi geworden!`);
         return true;
     }
 }
@@ -809,7 +809,7 @@ function showAnalysisAnimation() {
                     <div class="progress-bar">
                         <div class="progress-fill"></div>
                     </div>
-                    <p id="analysis-text">Das Maskottchen schaut sich dein Kunstwerk genau an...</p>
+                    <p id="analysis-text">Byte schaut sich dein Kunstwerk genau an...</p>
                 </div>
             </div>
         </div>
@@ -853,29 +853,29 @@ function evaluateMission() {
             passed = true;
             feedbackMessage = `🎉 Perfekt! Byte sieht ein wunderschönes Herzchen mit ${analysis.blackPixels} schwarzen Pixeln. Das wird mit nur ${analysis.blackPixels} Bits gespeichert - sehr effizient!`;
         } else {
-            feedbackMessage = `🤔 Byte schaut sich dein Bild genau an... Hmm, das Herzchen ist noch etwas schwer zu erkennen. Versuche mindestens 5 schwarze Pixel zu verwenden, um ein klareres Herz zu zeichnen!`;
+            feedbackMessage = `Byte schaut sich dein Bild genau an... Hmm, das Herzchen ist noch etwas schwer zu erkennen. Versuche mindestens 5 schwarze Pixel zu verwenden, um ein klareres Herz zu zeichnen!`;
         }
     } else if (currentMissionIndex === 1) {
         // Mission 2: Buntes Haus - Canvas muss 16x16 sein UND mindestens 4 Farben
         let issues = [];
         
         if (gridSize < 16) {
-            issues.push("🔍 Das Haus braucht mehr Platz für Details! Vergrößere deine Zeichenfläche auf mindestens 16×16 Pixel.");
+            issues.push("🔍 Der Apfel braucht mehr Platz für Details! Vergrößere deine Zeichenfläche auf mindestens 16×16 Pixel.");
         }
         
         if (availableColors < 4) {
-            issues.push("🎨 Das Haus ist Byte nicht bunt genug! Schalte mindestens 4 Farben frei, um ein farbenfrohen Haus zu malen.");
+            issues.push("🎨 Der Apfel samt Wurm ist Byte nicht bunt genug! Schalte mindestens 4 Farben frei, um ein farbenfrohen Haus zu malen.");
         }
         
         if (analysis.usedColors < 3) {
-            issues.push("🌈 Verwende mehr verschiedene Farben! Ein schönes Haus braucht mindestens 3 verschiedene Farben für Wände, Dach und Details.");
+            issues.push("🌈 Verwende mehr verschiedene Farben! Der Apfel braucht mindestens 3 verschiedene Farben.");
         }
         
         if (issues.length === 0) {
             passed = true;
-            feedbackMessage = `🏠 Wunderbar! Byte ist begeistert von deinem bunten Haus! Du hast ${analysis.usedColors} verschiedene Farben verwendet und eine ${gridSize}×${gridSize} Zeichenfläche genutzt. Das Haus sieht sehr detailliert aus!`;
+            feedbackMessage = `Wunderbar! Byte ist begeistert von deinem tollen Apfel! Du hast ${analysis.usedColors} verschiedene Farben verwendet und eine ${gridSize}×${gridSize} Zeichenfläche genutzt. Der Apfel sieht sehr detailliert aus!`;
         } else {
-            feedbackMessage = `🏠 Byte analysiert dein Haus...\n\n${issues.join('\n\n')}\n\nVerbessere diese Punkte und reiche dein Kunstwerk dann erneut ein!`;
+            feedbackMessage = `Byte analysiert deinen Apfel...\n\n${issues.join('\n\n')}\n\nVerbessere diese Punkte und reiche dein Kunstwerk dann erneut ein!`;
         }
     } else {
         // Für andere Missionen: Einfachere Prüfung
@@ -929,7 +929,7 @@ function showMissionFeedback(message) {
         <div class="modal-content">
             <div class="modal-header">
                 <img src="Info_Maskotchen.png" alt="Byte" class="mascot">
-                <h3>🤖 Byte's Analyse</h3>
+                <h3>Byte's Analyse</h3>
             </div>
             <div class="modal-body">
                 <p class="feedback-text">${message.replace(/\n/g, '<br>')}</p>
