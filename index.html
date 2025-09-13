@@ -74,6 +74,7 @@
             <section class="missions">
                 <h2>🎯 Aktuelle Mission</h2>
                 <div id="current-mission" class="mission-card">
+                    <div id="mission-timer" class="mission-timer"></div>
                     <h3>Mission 1: Erstes Herzchen</h3>
                     <p>Zeichne ein kleines Herz mit den verfügbaren Farben (Schwarz und Weiß). 
                        Jeder Pixel wird mit nur 1 Bit gespeichert - das sind 0 für Weiß und 1 für Schwarz!</p>
@@ -97,7 +98,7 @@
     <div id="quiz-modal" class="modal hidden">
         <div class="modal-content">
             <div class="modal-header">
-                <img id="mascot" src="Info_Maskotchen.png" alt="Hilfreicher Begleiter" class="mascot">
+                <img id="mascot" src="Byte_mascot/Byte_normal.png" alt="Hilfreicher Begleiter" class="mascot">
                 <h3 id="quiz-title">Frage</h3>
             </div>
             <div class="modal-body">
@@ -118,7 +119,7 @@
     <div id="success-modal" class="modal hidden">
         <div class="modal-content success">
             <div class="modal-header">
-                <img src="Info_Maskotchen.png" alt="Glückwunsch!" class="mascot">
+                <img id="success-mascot" src="Byte_mascot/Byte_Happy.png" alt="Glückwunsch!" class="mascot">
                 <h3>🎉 Toll gemacht!</h3>
             </div>
             <div class="modal-body">
@@ -126,6 +127,38 @@
             </div>
             <div class="modal-footer">
                 <button id="success-close" class="btn-primary">Weiter</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Timer Modal -->
+    <div id="timer-modal" class="modal hidden">
+        <div class="modal-content timer">
+            <div class="modal-header">
+                <img src="Byte_mascot/Byte_thinking.png" alt="Byte" class="mascot">
+                <h3>⏰ Zeit vergeht...</h3>
+            </div>
+            <div class="modal-body">
+                <p id="timer-message">Hey! Byte würde sich gerne dein Kunstwerk anschauen!<br><br>🎨 Magst du dein Bild einreichen?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="timer-close" class="btn-primary">💡 Weiter zeichnen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div id="error-modal" class="modal hidden">
+        <div class="modal-content error">
+            <div class="modal-header">
+                <img src="Byte_mascot/Byte_sad.png" alt="Byte" class="mascot">
+                <h3>❌ Leider falsch!</h3>
+            </div>
+            <div class="modal-body">
+                <p id="error-message">Das ist nicht richtig. Versuch es nochmal!</p>
+            </div>
+            <div class="modal-footer">
+                <button id="error-close" class="btn-primary">🔄 Nochmal versuchen</button>
             </div>
         </div>
     </div>

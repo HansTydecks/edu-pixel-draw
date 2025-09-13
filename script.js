@@ -15,6 +15,51 @@ let isEraserMode = false;
 let completedMissions = [];
 let currentMissionNumber = 1;
 
+// === BYTE EMOTIONS SYSTEM ===
+function getByteEmotion(context) {
+    const emotions = {
+        thinking: 'Byte_mascot/Byte_Thinking.png',
+        happy: 'Byte_mascot/Byte_Happy.png', 
+        normal: 'Byte_mascot/Byte_normal.png',
+        sad: 'Byte_mascot/Byte_Sad.png'
+    };
+    
+    switch(context) {
+        case 'analyzing':
+        case 'quiz':
+        case 'calculating':
+            return emotions.thinking;
+        case 'success':
+        case 'completed':
+        case 'celebration':
+            return emotions.happy;
+        case 'error':
+        case 'failed':
+        case 'wrong':
+            return emotions.sad;
+        case 'default':
+        case 'normal':
+        default:
+            return emotions.normal;
+    }
+}
+
+// Funktion um Byte's Emotion dynamisch zu ändern
+function updateByteEmotion(context) {
+    const mascots = document.querySelectorAll('.mascot');
+    const newSrc = getByteEmotion(context);
+    
+    mascots.forEach(mascot => {
+        if (mascot.src && !mascot.src.includes('Byte_mascot')) {
+            // Nur ändern wenn es noch die alte Info_Maskotchen.png ist
+            mascot.src = newSrc;
+        } else if (mascot.src.includes('Byte_mascot')) {
+            // Emotion aktualisieren wenn es schon ein Byte ist
+            mascot.src = newSrc;
+        }
+    });
+}
+
 // 64 Farben Palette (Endesga 64) - Optimierte Reihenfolge: Primärfarben zuerst
 const colors = [
     // Basis (2 Farben)
@@ -103,6 +148,7 @@ const missions = [
         description: "Zeichne ein Herz. Jeder Pixel wird mit nur 1 Bit gespeichert - das sind 0 für Weiß und 1 für Schwarz!",
         requiredColors: 2,
         requiredSize: 8,
+        timeLimit: 3, // 3 Minuten für Herz
         completed: false
     },
     {
@@ -111,6 +157,7 @@ const missions = [
         description: "Zeichne einen Apfel samt Wurm! Sicher brauchst du für die vielen Details mehr Platz und mehr Farben als Schwarz und Weiß.",
         requiredColors: 4,
         requiredSize: 16,
+        timeLimit: 4, // 4 Minuten für Apfel
         completed: false
     },
     {
@@ -119,11 +166,18 @@ const missions = [
         description: "Zeichne einen Schmetterling! Vermutlich wirst du für die vielen Farben noch mehr Platz benötigen.",
         requiredColors: 8,
         requiredSize: 16,
+        timeLimit: 5, // 5 Minuten für Schmetterling
         completed: false
     }
 ];
 
 let currentMissionIndex = 0;
+
+// Timer-Variablen
+let missionTimer = null;
+let missionStartTime = null;
+let timerDuration = 0; // in Sekunden
+let timerAlreadyExpired = false; // Flag um zu verhindern, dass Timer-Nachricht mehrfach erscheint
 
 // Quiz-Daten
 const quizzes = {
@@ -300,6 +354,8 @@ function initEventListeners() {
     document.getElementById('quiz-submit').addEventListener('click', submitQuiz);
     document.getElementById('quiz-close').addEventListener('click', closeQuiz);
     document.getElementById('success-close').addEventListener('click', closeSuccess);
+    document.getElementById('error-close').addEventListener('click', closeError);
+    document.getElementById('timer-close').addEventListener('click', closeTimerModal);
 }
 
 function drawGrid() {
@@ -433,6 +489,9 @@ function updateColorPalette() {
 }
 
 function submitDrawing() {
+    // Timer stoppen beim Einreichen
+    stopMissionTimer();
+    
     const submitBtn = document.getElementById('submit-drawing');
     submitBtn.disabled = true;
     submitBtn.textContent = 'Wird überprüft...';
@@ -545,8 +604,14 @@ function expandCanvas() {
 }
 
 function showQuiz(type, index) {
+    // Timer pausieren während Quiz
+    pauseMissionTimer();
+    
     const quiz = quizzes[type][index];
     const modal = document.getElementById('quiz-modal');
+    
+    // Byte zeigt Denk-Emotion für Quiz
+    updateByteEmotion('quiz');
     
     document.getElementById('quiz-title').textContent = "Frage";
     document.getElementById('quiz-question').textContent = quiz.question;
@@ -595,7 +660,7 @@ function submitQuiz() {
     if (quiz.type === 'multiple') {
         const selected = document.querySelector('.quiz-option.selected');
         if (!selected) {
-            showMessage("Bitte wähle eine Antwort!", "error");
+            showError("Bitte wähle eine Antwort!");
             return;
         }
         userAnswer = parseInt(selected.dataset.index);
@@ -616,7 +681,8 @@ function submitQuiz() {
         
         showSuccess(quiz.explanation);
     } else {
-        showMessage("Das ist nicht richtig. Versuch es nochmal!", "error");
+        // Zeige elegantes Error-Modal statt simpler Alert
+        showError("Das ist nicht richtig. Versuch es nochmal!");
     }
 }
 
@@ -688,9 +754,117 @@ function displayCurrentMission() {
     const missionCard = document.getElementById('current-mission');
     
     missionCard.innerHTML = `
+        <div id="mission-timer" class="mission-timer"></div>
         <h3>${mission.title}</h3>
         <p>${mission.description}</p>
     `;
+    
+    // Timer starten
+    startMissionTimer(mission.timeLimit);
+}
+
+// Timer-Funktionen
+function startMissionTimer(minutes) {
+    // Vorherigen Timer stoppen
+    if (missionTimer) {
+        clearInterval(missionTimer);
+    }
+    
+    // Timer-Flag für neue Mission zurücksetzen
+    timerAlreadyExpired = false;
+    
+    timerDuration = minutes * 60; // Minuten in Sekunden
+    missionStartTime = Date.now();
+    
+    const timerBar = document.getElementById('mission-timer');
+    timerBar.style.width = '100%';
+    timerBar.classList.remove('warning');
+    
+    // Timer-Update alle Sekunde
+    missionTimer = setInterval(() => {
+        const elapsed = Math.floor((Date.now() - missionStartTime) / 1000);
+        const remaining = Math.max(0, timerDuration - elapsed);
+        const progress = (remaining / timerDuration) * 100;
+        
+        // Timer-Balken aktualisieren
+        timerBar.style.width = progress + '%';
+        
+        // Warnung bei letzten 30 Sekunden
+        if (remaining <= 30 && remaining > 0) {
+            timerBar.classList.add('warning');
+        }
+        
+        // Timer abgelaufen
+        if (remaining <= 0) {
+            clearInterval(missionTimer);
+            showTimerExpiredMessage();
+        }
+    }, 1000);
+}
+
+function stopMissionTimer() {
+    if (missionTimer) {
+        clearInterval(missionTimer);
+        missionTimer = null;
+    }
+}
+
+function pauseMissionTimer() {
+    if (missionTimer && missionStartTime) {
+        // Berechne vergangene Zeit und pausiere
+        const elapsed = Math.floor((Date.now() - missionStartTime) / 1000);
+        timerDuration = Math.max(0, timerDuration - elapsed);
+        stopMissionTimer();
+    }
+}
+
+function resumeMissionTimer() {
+    if (timerDuration > 0) {
+        missionStartTime = Date.now();
+        const timerBar = document.getElementById('mission-timer');
+        
+        missionTimer = setInterval(() => {
+            const elapsed = Math.floor((Date.now() - missionStartTime) / 1000);
+            const remaining = Math.max(0, timerDuration - elapsed);
+            const progress = (remaining / (missions[currentMissionIndex].timeLimit * 60)) * 100;
+            
+            timerBar.style.width = progress + '%';
+            
+            if (remaining <= 30 && remaining > 0) {
+                timerBar.classList.add('warning');
+            }
+            
+            if (remaining <= 0) {
+                clearInterval(missionTimer);
+                showTimerExpiredMessage();
+            }
+        }, 1000);
+    }
+}
+
+function showTimerExpiredMessage() {
+    // Nur einmal pro Mission anzeigen
+    if (timerAlreadyExpired) {
+        return;
+    }
+    
+    timerAlreadyExpired = true;
+    
+    // Byte zeigt nachdenkliche Emotion (nicht traurig!)
+    updateByteEmotion('thinking');
+    
+    // Timer-Modal zeigen (nicht Error-Modal)
+    showTimerModal();
+}
+
+function showTimerModal() {
+    document.getElementById('timer-modal').classList.remove('hidden');
+}
+
+function closeTimerModal() {
+    document.getElementById('timer-modal').classList.add('hidden');
+    // Byte kehrt zu normaler Emotion zurück
+    updateByteEmotion('normal');
 }
 
 function checkMissionProgress() {
@@ -784,16 +958,43 @@ function advanceToNextMission() {
 }
 
 function showSuccess(message) {
+    // Byte zeigt fröhliche Emotion bei Erfolg
+    updateByteEmotion('success');
+    
     document.getElementById('success-message').textContent = message;
     document.getElementById('success-modal').classList.remove('hidden');
 }
 
+function showError(message) {
+    // Byte zeigt traurige Emotion bei Fehler
+    updateByteEmotion('wrong');
+    
+    document.getElementById('error-message').textContent = message;
+    document.getElementById('error-modal').classList.remove('hidden');
+}
+
 function closeQuiz() {
     document.getElementById('quiz-modal').classList.add('hidden');
+    // Byte kehrt zu normaler Emotion zurück
+    updateByteEmotion('normal');
+    // Timer wieder fortsetzen
+    resumeMissionTimer();
 }
 
 function closeSuccess() {
     document.getElementById('success-modal').classList.add('hidden');
+    // Byte kehrt zu normaler Emotion zurück
+    updateByteEmotion('normal');
+    // Timer wieder fortsetzen (falls noch aktiv)
+    resumeMissionTimer();
+}
+
+function closeError() {
+    document.getElementById('error-modal').classList.add('hidden');
+    // Byte kehrt zu normaler Emotion zurück
+    updateByteEmotion('normal');
+    // Timer wieder fortsetzen
+    resumeMissionTimer();
 }
 
 function showMessage(message, type, title = null) {
@@ -808,7 +1009,7 @@ function showAnalysisAnimation() {
     modal.innerHTML = `
         <div class="modal-content analysis-content">
             <div class="modal-header">
-                <img src="Info_Maskotchen.png" alt="Analyzing..." class="mascot analyzing">
+                <img src="${getByteEmotion('analyzing')}" alt="Analyzing..." class="mascot analyzing">
                 <h3>🔍 Bild wird analysiert...</h3>
             </div>
             <div class="modal-body">
@@ -836,7 +1037,7 @@ function showAnalysisAnimation() {
     }, 2000);
     
     setTimeout(() => {
-        document.getElementById('analysis-text').textContent = 'Bewertung wird erstellt...';
+        document.getElementById('analysis-text').textContent = 'Ergebnis wird zusammengestellt...';
         document.querySelector('.progress-fill').style.width = '100%';
     }, 3000);
     
@@ -935,7 +1136,7 @@ function showMissionFeedback(message) {
     modal.innerHTML = `
         <div class="modal-content">
             <div class="modal-header">
-                <img src="Info_Maskotchen.png" alt="Byte" class="mascot">
+                <img src="${getByteEmotion('error')}" alt="Byte" class="mascot">
                 <h3>Byte's Analyse</h3>
             </div>
             <div class="modal-body">
