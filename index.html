@@ -81,6 +81,9 @@
                     <button id="submit-drawing" class="btn-submit">
                         ✅ Mission einreichen
                     </button>
+                    <button id="calculator-btn" class="btn-calculator">
+                        🧮 Taschenrechner
+                    </button>
                 </div>
             </section>
         </main>
@@ -119,6 +122,54 @@
             </div>
             <div class="modal-footer">
                 <button id="success-close" class="btn-primary">Weiter</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Taschenrechner Modal -->
+    <div id="calculator-modal" class="modal hidden">
+        <div class="modal-content calculator">
+            <div class="modal-header">
+                <h3>🧮 Pixel-Taschenrechner</h3>
+                <button id="calculator-close" class="btn-close">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="calculator-container">
+                    <div class="calculator-display">
+                        <div id="calc-screen" class="seven-segment-display">0</div>
+                    </div>
+                    <div class="calculator-buttons">
+                        <div class="calc-row">
+                            <button class="calc-btn calc-clear" data-action="clear">C</button>
+                            <button class="calc-btn calc-equals" data-action="=">=</button>
+                            <button class="calc-btn calc-empty"></button>
+                            <button class="calc-btn calc-operator" data-action="/">÷</button>
+                        </div>
+                        <div class="calc-row">
+                            <button class="calc-btn calc-number" data-number="7">7</button>
+                            <button class="calc-btn calc-number" data-number="8">8</button>
+                            <button class="calc-btn calc-number" data-number="9">9</button>
+                            <button class="calc-btn calc-operator" data-action="*">×</button>
+                        </div>
+                        <div class="calc-row">
+                            <button class="calc-btn calc-number" data-number="4">4</button>
+                            <button class="calc-btn calc-number" data-number="5">5</button>
+                            <button class="calc-btn calc-number" data-number="6">6</button>
+                            <button class="calc-btn calc-operator" data-action="-">-</button>
+                        </div>
+                        <div class="calc-row">
+                            <button class="calc-btn calc-number" data-number="1">1</button>
+                            <button class="calc-btn calc-number" data-number="2">2</button>
+                            <button class="calc-btn calc-number" data-number="3">3</button>
+                            <button class="calc-btn calc-operator" data-action="+">+</button>
+                        </div>
+                        <div class="calc-row">
+                            <button class="calc-btn calc-number calc-zero" data-number="0">0</button>
+                            <button class="calc-btn calc-number" data-number=".">.</button>
+                            <button class="calc-btn calc-empty"></button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -1031,3 +1031,246 @@ window.addEventListener('resize', function() {
         canvas.style.height = targetSize + 'px';
     }
 });
+
+// === TASCHENRECHNER FUNKTIONALITÄT ===
+
+class Calculator {
+    constructor() {
+        this.display = document.getElementById('calc-screen');
+        this.currentInput = '0';
+        this.previousInput = '';
+        this.operator = '';
+        this.waitingForOperand = false;
+        this.showingOperator = false;
+        this.setupEventListeners();
+    }
+
+    setupEventListeners() {
+        // Modal öffnen/schließen
+        document.getElementById('calculator-btn').addEventListener('click', () => {
+            this.openModal();
+        });
+
+        document.getElementById('calculator-close').addEventListener('click', () => {
+            this.closeModal();
+        });
+
+        // Calculator buttons
+        document.querySelectorAll('.calc-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const number = e.target.getAttribute('data-number');
+                const action = e.target.getAttribute('data-action');
+
+                // Button-Press Animation
+                e.target.classList.add('pressed');
+                setTimeout(() => e.target.classList.remove('pressed'), 100);
+
+                if (number !== null) {
+                    if (number === '.') {
+                        this.inputDecimal();
+                    } else {
+                        this.inputNumber(number);
+                    }
+                } else if (action !== null) {
+                    this.performAction(action);
+                }
+            });
+        });
+
+        // Keyboard support
+        document.addEventListener('keydown', (e) => {
+            if (!document.getElementById('calculator-modal').classList.contains('hidden')) {
+                e.preventDefault();
+                this.handleKeyboardInput(e.key);
+            }
+        });
+
+        // Modal schließen bei Klick außerhalb
+        document.getElementById('calculator-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'calculator-modal') {
+                this.closeModal();
+            }
+        });
+    }
+
+    openModal() {
+        document.getElementById('calculator-modal').classList.remove('hidden');
+        this.reset();
+    }
+
+    closeModal() {
+        document.getElementById('calculator-modal').classList.add('hidden');
+    }
+
+    inputNumber(number) {
+        if (this.waitingForOperand) {
+            this.currentInput = number;
+            this.waitingForOperand = false;
+        } else {
+            if (this.currentInput === '0') {
+                this.currentInput = number;
+            } else {
+                this.currentInput += number;
+            }
+        }
+        this.showingOperator = false;
+        this.updateDisplay();
+    }
+
+    inputDecimal() {
+        if (this.waitingForOperand) {
+            this.currentInput = '0.';
+            this.waitingForOperand = false;
+        } else if (this.currentInput.indexOf('.') === -1) {
+            this.currentInput += '.';
+        }
+        this.showingOperator = false;
+        this.updateDisplay();
+    }
+
+    performAction(action) {
+        switch (action) {
+            case 'clear':
+                this.reset();
+                break;
+            case '=':
+                this.calculate();
+                break;
+            case '+':
+            case '-':
+            case '*':
+            case '/':
+                this.setOperator(action);
+                break;
+        }
+    }
+
+    setOperator(nextOperator) {
+        const inputValue = parseFloat(this.currentInput);
+
+        if (this.previousInput === '') {
+            this.previousInput = inputValue;
+        } else if (this.operator) {
+            const currentValue = this.previousInput || 0;
+            const newValue = this.performCalculation(currentValue, inputValue, this.operator);
+
+            this.currentInput = String(newValue);
+            this.previousInput = newValue;
+        }
+
+        this.waitingForOperand = true;
+        this.operator = nextOperator;
+        
+        // Zeige den Operator im Display an
+        this.showOperatorInDisplay(nextOperator);
+    }
+
+    calculate() {
+        const prev = parseFloat(this.previousInput);
+        const current = parseFloat(this.currentInput);
+
+        if (this.previousInput !== '' && this.operator) {
+            const newValue = this.performCalculation(prev, current, this.operator);
+            this.currentInput = String(newValue);
+            this.previousInput = '';
+            this.operator = '';
+            this.waitingForOperand = true;
+            this.showingOperator = false;
+            this.updateDisplay();
+        }
+    }
+
+    performCalculation(firstOperand, secondOperand, operator) {
+        switch (operator) {
+            case '+':
+                return firstOperand + secondOperand;
+            case '-':
+                return firstOperand - secondOperand;
+            case '*':
+                return firstOperand * secondOperand;
+            case '/':
+                return secondOperand !== 0 ? firstOperand / secondOperand : 0;
+            default:
+                return secondOperand;
+        }
+    }
+
+    reset() {
+        this.currentInput = '0';
+        this.previousInput = '';
+        this.operator = '';
+        this.waitingForOperand = false;
+        this.showingOperator = false;
+        this.updateDisplay();
+    }
+
+    updateDisplay() {
+        // Nur updaten wenn kein Operator angezeigt wird
+        if (this.showingOperator) {
+            return;
+        }
+        
+        const value = parseFloat(this.currentInput);
+        
+        // Formatierung für große Zahlen und Nachkommastellen
+        let displayValue;
+        if (Math.abs(value) >= 1000000) {
+            displayValue = value.toExponential(2);
+        } else if (value % 1 !== 0) {
+            displayValue = parseFloat(value.toFixed(8)).toString();
+        } else {
+            displayValue = value.toString();
+        }
+        
+        // Maximal 12 Zeichen im Display
+        if (displayValue.length > 12) {
+            displayValue = parseFloat(value).toExponential(2);
+        }
+        
+        this.display.textContent = displayValue;
+    }
+
+    showOperatorInDisplay(operator) {
+        // Zeige den Operator dauerhaft im Display an
+        let operatorSymbol = operator;
+        if (operator === '*') operatorSymbol = '×';
+        if (operator === '/') operatorSymbol = '÷';
+        
+        this.display.textContent = this.currentInput + ' ' + operatorSymbol;
+        this.showingOperator = true;
+    }
+
+    handleKeyboardInput(key) {
+        if (key >= '0' && key <= '9') {
+            this.inputNumber(key);
+        } else if (key === '.') {
+            this.inputDecimal();
+        } else if (key === '+' || key === '-' || key === '*' || key === '/') {
+            this.performAction(key);
+        } else if (key === 'Enter' || key === '=') {
+            this.calculate();
+        } else if (key === 'Escape' || key === 'c' || key === 'C') {
+            this.reset();
+        } else if (key === 'Backspace') {
+            if (this.currentInput.length > 1) {
+                this.currentInput = this.currentInput.slice(0, -1);
+            } else {
+                this.currentInput = '0';
+            }
+            this.showingOperator = false;
+            this.updateDisplay();
+        }
+    }
+}
+
+// Taschenrechner initialisieren
+let calculator;
+
+// Warte bis DOM geladen ist
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        calculator = new Calculator();
+    });
+} else {
+    calculator = new Calculator();
+}

@@ -841,3 +841,254 @@ header p {
 .bit-cell.bit-4 {
     font-size: 8px;
 }
+
+/* === Taschenrechner Styling === */
+
+/* Taschenrechner Button im Missionskasten */
+.btn-calculator {
+    background: linear-gradient(145deg, #2d5aa0, #1e3f73);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    margin-left: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(45, 90, 160, 0.3);
+}
+
+.btn-calculator:hover {
+    background: linear-gradient(145deg, #3667b8, #204788);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(45, 90, 160, 0.4);
+}
+
+.btn-calculator:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(45, 90, 160, 0.3);
+}
+
+/* Calculator Modal */
+.modal-content.calculator {
+    max-width: 320px;
+    background: #1a1a1a;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.modal-content.calculator .modal-header {
+    background: #2d2d2d;
+    color: #ffffff;
+    padding: 15px 20px;
+    border-radius: 15px 15px 0 0;
+    border-bottom: 1px solid #444;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-content.calculator .modal-header h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #00ff88;
+}
+
+.btn-close {
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+
+.btn-close:hover {
+    background-color: #ff4444;
+}
+
+/* Calculator Container */
+.calculator-container {
+    padding: 20px;
+    background: #1a1a1a;
+    border-radius: 0 0 15px 15px;
+}
+
+/* 8-Segment Display */
+.calculator-display {
+    background: #000000;
+    border: 3px solid #333;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    padding: 15px;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+.seven-segment-display {
+    font-family: 'Courier New', monospace;
+    font-size: 32px;
+    font-weight: bold;
+    color: #00ff88;
+    text-align: right;
+    min-height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    background: #0a0a0a;
+    border-radius: 4px;
+    padding: 10px 15px;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px #00ff88;
+    position: relative;
+    overflow: hidden;
+}
+
+.seven-segment-display::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        45deg,
+        transparent 48%,
+        rgba(0, 255, 136, 0.1) 49%,
+        rgba(0, 255, 136, 0.1) 51%,
+        transparent 52%
+    );
+    background-size: 4px 4px;
+    pointer-events: none;
+}
+
+/* Calculator Buttons */
+.calculator-buttons {
+    display: grid;
+    gap: 8px;
+}
+
+.calc-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.calc-row:last-child {
+    grid-template-columns: 2fr 1fr 1fr;
+}
+
+.calc-row:nth-last-child(2) {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.calc-btn {
+    background: linear-gradient(145deg, #4a4a4a, #2d2d2d);
+    border: 1px solid #555;
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 15px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    user-select: none;
+}
+
+.calc-btn:hover {
+    background: linear-gradient(145deg, #5a5a5a, #3d3d3d);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+}
+
+.calc-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(145deg, #3d3d3d, #2d2d2d);
+}
+
+/* Spezielle Button-Stile */
+.calc-number {
+    background: linear-gradient(145deg, #4a4a4a, #2d2d2d);
+}
+
+.calc-operator {
+    background: linear-gradient(145deg, #ff9500, #cc7700);
+    color: #ffffff;
+}
+
+.calc-operator:hover {
+    background: linear-gradient(145deg, #ffaa20, #dd8800);
+}
+
+.calc-equals {
+    background: linear-gradient(145deg, #2196F3, #1976D2);
+    color: #ffffff;
+}
+
+.calc-equals:hover {
+    background: linear-gradient(145deg, #42A5F5, #1E88E5);
+}
+
+.calc-clear {
+    background: linear-gradient(145deg, #ff4444, #cc2222);
+    color: #ffffff;
+}
+
+.calc-clear:hover {
+    background: linear-gradient(145deg, #ff5555, #dd3333);
+}
+
+.calc-empty {
+    background: transparent;
+    border: none;
+    cursor: default;
+    box-shadow: none;
+}
+
+.calc-empty:hover {
+    background: transparent;
+    transform: none;
+    box-shadow: none;
+}
+
+.calc-zero {
+    grid-column: span 2;
+}
+
+/* Animationen für Calculator */
+@keyframes calcButtonPress {
+    0% { transform: scale(1); }
+    50% { transform: scale(0.95); }
+    100% { transform: scale(1); }
+}
+
+.calc-btn.pressed {
+    animation: calcButtonPress 0.1s ease;
+}
+
+/* Responsive Design für Calculator */
+@media (max-width: 768px) {
+    .modal-content.calculator {
+        max-width: 90vw;
+        margin: 10px;
+    }
+    
+    .seven-segment-display {
+        font-size: 24px;
+        min-height: 35px;
+    }
+    
+    .calc-btn {
+        padding: 12px;
+        font-size: 16px;
+    }
+}
