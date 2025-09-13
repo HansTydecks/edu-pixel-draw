@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pixel & Bits - Lerne wie Computer Bilder speichern</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -84,6 +85,9 @@
                     <button id="calculator-btn" class="btn-calculator">
                         🧮 Taschenrechner
                     </button>
+                    <button id="export-pdf-btn" class="btn-export">
+                        📄 Portfolio als PDF
+                    </button>
                 </div>
             </section>
         </main>
@@ -122,6 +126,37 @@
             </div>
             <div class="modal-footer">
                 <button id="success-close" class="btn-primary">Weiter</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PDF Export Modal -->
+    <div id="pdf-export-modal" class="modal hidden">
+        <div class="modal-content pdf-export">
+            <div class="modal-header">
+                <h3>📄 Portfolio als PDF erstellen</h3>
+                <button id="pdf-export-close" class="btn-close">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="pdf-export-container">
+                    <div class="pdf-info">
+                        <p>Erstelle ein PDF mit all deinen Pixel-Kunstwerken und den technischen Details!</p>
+                        <div id="saved-missions-preview" class="missions-preview">
+                            <p><strong>Gespeicherte Missionen:</strong></p>
+                            <div id="missions-list" class="missions-list">
+                                <p class="no-missions">Noch keine Missionen abgeschlossen. Reiche deine erste Zeichnung ein!</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="name-input-section">
+                        <label for="student-name">Dein Name für das Portfolio:</label>
+                        <input type="text" id="student-name" placeholder="Max Mustermann" maxlength="50">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="generate-pdf" class="btn-primary" disabled>📄 PDF erstellen</button>
+                <button id="pdf-export-cancel" class="btn-secondary">Abbrechen</button>
             </div>
         </div>
     </div>

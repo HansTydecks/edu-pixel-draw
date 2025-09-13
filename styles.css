@@ -1064,6 +1064,195 @@ header p {
     grid-column: span 2;
 }
 
+/* === PDF Export Styling === */
+
+/* PDF Export Button */
+.btn-export {
+    background: linear-gradient(145deg, #4CAF50, #45a049);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    margin-left: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+    display: none; /* Initial versteckt */
+}
+
+.btn-export:hover {
+    background: linear-gradient(145deg, #5CBF60, #4CAF50);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
+}
+
+.btn-export:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+}
+
+/* PDF Export Modal */
+.modal-content.pdf-export {
+    max-width: 500px;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content.pdf-export .modal-header {
+    background: #f8f9fa;
+    color: #333;
+    padding: 20px;
+    border-radius: 15px 15px 0 0;
+    border-bottom: 1px solid #e9ecef;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-content.pdf-export .modal-header h3 {
+    margin: 0;
+    font-size: 20px;
+    color: #4CAF50;
+}
+
+.pdf-export-container {
+    padding: 0;
+}
+
+.pdf-info {
+    margin-bottom: 20px;
+}
+
+.pdf-info p {
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.missions-preview {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 15px;
+    border: 1px solid #e9ecef;
+}
+
+.missions-preview strong {
+    color: #333;
+}
+
+.missions-list {
+    margin-top: 10px;
+}
+
+.mission-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.mission-item:last-child {
+    border-bottom: none;
+}
+
+.mission-thumbnail {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-right: 12px;
+    background: #fff;
+    image-rendering: pixelated;
+}
+
+.mission-info {
+    flex: 1;
+}
+
+.mission-title {
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 4px 0;
+}
+
+.mission-details {
+    font-size: 12px;
+    color: #666;
+    margin: 0;
+}
+
+.no-missions {
+    color: #999;
+    font-style: italic;
+    text-align: center;
+    margin: 10px 0;
+}
+
+.name-input-section {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e9ecef;
+}
+
+.name-input-section label {
+    display: block;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.name-input-section input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.name-input-section input:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+.name-input-section input:valid {
+    border-color: #4CAF50;
+}
+
+/* Button States */
+.btn-primary:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.btn-primary:disabled:hover {
+    background: #ccc;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Responsive Design für PDF Export */
+@media (max-width: 768px) {
+    .modal-content.pdf-export {
+        max-width: 90vw;
+        margin: 10px;
+    }
+    
+    .mission-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .btn-export {
+        margin-left: 0;
+        width: 100%;
+    }
+}
+
 /* Animationen für Calculator */
 @keyframes calcButtonPress {
     0% { transform: scale(1); }

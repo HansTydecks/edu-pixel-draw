@@ -11,6 +11,10 @@ let availableColors = 2;
 let pixelData = [];
 let isEraserMode = false;
 
+// PDF Export und Mission Speicher
+let completedMissions = [];
+let currentMissionNumber = 1;
+
 // 64 Farben Palette (Endesga 64) - Optimierte Reihenfolge: Primärfarben zuerst
 const colors = [
     // Basis (2 Farben)
@@ -749,6 +753,9 @@ function advanceToNextMission() {
     // Mission als abgeschlossen markieren
     currentMission.completed = true;
     
+    // Mission für PDF-Export speichern
+    saveMissionToPortfolio(currentMission);
+    
     if (currentMissionIndex < missions.length - 1) {
         currentMissionIndex++;
         displayCurrentMission();
@@ -1274,3 +1281,251 @@ if (document.readyState === 'loading') {
 } else {
     calculator = new Calculator();
 }
+
+// === PDF EXPORT UND MISSION SPEICHER FUNKTIONALITÄT ===
+
+// Funktion zum Speichern einer abgeschlossenen Mission
+function saveMissionToPortfolio(mission) {
+    // Canvas als Bild erfassen
+    const canvasDataURL = canvas.toDataURL('image/png');
+    
+    // Technische Informationen sammeln
+    const missionData = {
+        id: currentMissionNumber++,
+        title: mission.title,
+        description: mission.description,
+        timestamp: new Date().toLocaleString('de-DE'),
+        image: canvasDataURL,
+        technicalInfo: {
+            canvasSize: `${gridSize} × ${gridSize}`,
+            totalPixels: gridSize * gridSize,
+            availableColors: availableColors,
+            bitsPerPixel: bitsPerPixel,
+            totalBits: gridSize * gridSize * bitsPerPixel,
+            memoryBytes: Math.ceil((gridSize * gridSize * bitsPerPixel) / 8)
+        }
+    };
+    
+    // Mission zur Liste hinzufügen
+    completedMissions.push(missionData);
+    
+    // PDF-Button aktivieren falls noch nicht aktiviert
+    updatePDFExportUI();
+    
+    console.log(`Mission '${mission.title}' gespeichert für PDF-Export`);
+}
+
+// PDF Export UI aktualisieren
+function updatePDFExportUI() {
+    const exportBtn = document.getElementById('export-pdf-btn');
+    const missionsList = document.getElementById('missions-list');
+    
+    if (completedMissions.length > 0) {
+        exportBtn.style.display = 'block';
+        
+        // Missions-Liste im Modal aktualisieren
+        missionsList.innerHTML = '';
+        completedMissions.forEach(mission => {
+            const missionDiv = document.createElement('div');
+            missionDiv.className = 'mission-item';
+            
+            missionDiv.innerHTML = `
+                <img src="${mission.image}" class="mission-thumbnail" alt="${mission.title}">
+                <div class="mission-info">
+                    <div class="mission-title">${mission.title}</div>
+                    <div class="mission-details">
+                        ${mission.technicalInfo.canvasSize} Pixel, 
+                        ${mission.technicalInfo.availableColors} Farben, 
+                        ${mission.technicalInfo.bitsPerPixel} Bits/Pixel
+                    </div>
+                </div>
+            `;
+            
+            missionsList.appendChild(missionDiv);
+        });
+    } else {
+        exportBtn.style.display = 'none';
+        missionsList.innerHTML = '<p class="no-missions">Noch keine Missionen abgeschlossen. Reiche deine erste Zeichnung ein!</p>';
+    }
+}
+
+// PDF Export Modal Event Listeners
+function setupPDFExportListeners() {
+    const exportBtn = document.getElementById('export-pdf-btn');
+    const modal = document.getElementById('pdf-export-modal');
+    const closeBtn = document.getElementById('pdf-export-close');
+    const cancelBtn = document.getElementById('pdf-export-cancel');
+    const generateBtn = document.getElementById('generate-pdf');
+    const nameInput = document.getElementById('student-name');
+    
+    // Modal öffnen
+    exportBtn.addEventListener('click', () => {
+        updatePDFExportUI();
+        modal.classList.remove('hidden');
+    });
+    
+    // Modal schließen
+    closeBtn.addEventListener('click', () => {
+        modal.classList.add('hidden');
+    });
+    
+    cancelBtn.addEventListener('click', () => {
+        modal.classList.add('hidden');
+    });
+    
+    // Modal schließen bei Klick außerhalb
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.classList.add('hidden');
+        }
+    });
+    
+    // Name Input Validation
+    nameInput.addEventListener('input', () => {
+        const hasName = nameInput.value.trim().length > 0;
+        const hasMissions = completedMissions.length > 0;
+        generateBtn.disabled = !(hasName && hasMissions);
+    });
+    
+    // PDF generieren
+    generateBtn.addEventListener('click', async () => {
+        const studentName = nameInput.value.trim();
+        if (studentName && completedMissions.length > 0) {
+            generateBtn.disabled = true;
+            generateBtn.textContent = 'PDF wird erstellt...';
+            
+            try {
+                await generatePDF(studentName);
+                modal.classList.add('hidden');
+            } catch (error) {
+                console.error('Fehler bei PDF-Generierung:', error);
+                alert('Fehler beim Erstellen des PDFs. Bitte versuche es erneut.');
+            } finally {
+                generateBtn.disabled = false;
+                generateBtn.textContent = '📄 PDF erstellen';
+            }
+        }
+    });
+}
+
+// PDF Generierung
+async function generatePDF(studentName) {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    
+    // PDF-Konstanten
+    const pageWidth = 210;
+    const pageHeight = 297;
+    const margin = 20;
+    const usableWidth = pageWidth - (2 * margin);
+    const usableHeight = pageHeight - (2 * margin);
+    
+    // Header
+    pdf.setFontSize(24);
+    pdf.setTextColor(76, 175, 80);
+    pdf.text('Pixel & Bits Portfolio', margin, margin + 15);
+    
+    pdf.setFontSize(16);
+    pdf.setTextColor(100, 100, 100);
+    pdf.text(`Erstellt von: ${studentName}`, margin, margin + 25);
+    
+    pdf.setFontSize(12);
+    pdf.text(`Erstellt am: ${new Date().toLocaleString('de-DE')}`, margin, margin + 32);
+    
+    // Linie unter Header
+    pdf.setDrawColor(200, 200, 200);
+    pdf.line(margin, margin + 38, pageWidth - margin, margin + 38);
+    
+    let currentY = margin + 50;
+    let pageNumber = 1;
+    
+    // Für jede Mission
+    for (let i = 0; i < completedMissions.length; i++) {
+        const mission = completedMissions[i];
+        
+        // Prüfen ob neuer Seitenwechsel nötig
+        if (currentY > pageHeight - 80) {
+            pdf.addPage();
+            pageNumber++;
+            currentY = margin + 20;
+        }
+        
+        // Mission Titel
+        pdf.setFontSize(16);
+        pdf.setTextColor(51, 51, 51);
+        pdf.text(`Mission ${mission.id}: ${mission.title.replace(/^Mission \d+:\s*/, '')}`, margin, currentY);
+        currentY += 10;
+        
+        // Mission Beschreibung
+        pdf.setFontSize(10);
+        pdf.setTextColor(102, 102, 102);
+        const wrappedDescription = pdf.splitTextToSize(mission.description, usableWidth - 80);
+        pdf.text(wrappedDescription, margin, currentY);
+        currentY += wrappedDescription.length * 4 + 5;
+        
+        // Bild hinzufügen
+        try {
+            const imgSize = 60; // mm
+            pdf.addImage(mission.image, 'PNG', margin, currentY, imgSize, imgSize);
+            
+            // Technische Informationen neben dem Bild
+            const infoStartX = margin + imgSize + 10;
+            const infoStartY = currentY + 10;
+            
+            pdf.setFontSize(12);
+            pdf.setTextColor(51, 51, 51);
+            pdf.text('Technische Details:', infoStartX, infoStartY);
+            
+            pdf.setFontSize(10);
+            pdf.setTextColor(76, 175, 80);
+            
+            const technicalInfo = [
+                `Canvas-Groesse: ${mission.technicalInfo.canvasSize} Pixel`,
+                `Verfuegbare Farben: ${mission.technicalInfo.availableColors}`,
+                `Bits pro Pixel: ${mission.technicalInfo.bitsPerPixel}`,
+                `Gesamt-Pixel: ${mission.technicalInfo.totalPixels}`,
+                `Gesamt-Bits: ${mission.technicalInfo.totalBits}`,
+                `Speicher: ${mission.technicalInfo.memoryBytes} Bytes`
+            ];
+            
+            technicalInfo.forEach((info, index) => {
+                pdf.text(`• ${info}`, infoStartX, infoStartY + 8 + (index * 6));
+            });
+            
+            currentY += imgSize + 15;
+            
+        } catch (error) {
+            console.error('Fehler beim Hinzufügen des Bildes:', error);
+            currentY += 20;
+        }
+        
+        // Trennlinie
+        if (i < completedMissions.length - 1) {
+            pdf.setDrawColor(230, 230, 230);
+            pdf.line(margin, currentY, pageWidth - margin, currentY);
+            currentY += 10;
+        }
+    }
+    
+    // Seitenzahlen hinzufügen
+    const totalPages = pdf.internal.getNumberOfPages();
+    for (let i = 1; i <= totalPages; i++) {
+        pdf.setPage(i);
+        pdf.setFontSize(10);
+        pdf.setTextColor(150, 150, 150);
+        pdf.text(`Seite ${i} von ${totalPages}`, pageWidth - margin - 30, pageHeight - 10);
+    }
+    
+    // PDF herunterladen
+    const fileName = `Pixel-Bits-Portfolio-${studentName.replace(/[^a-zA-Z0-9]/g, '_')}-${new Date().toISOString().split('T')[0]}.pdf`;
+    pdf.save(fileName);
+    
+    // Erfolg anzeigen
+    showSuccess(`🎉 PDF erfolgreich erstellt!\n\nDein Portfolio "${fileName}" wurde heruntergeladen.\n\nEs enthält alle ${completedMissions.length} abgeschlossenen Missionen mit technischen Details.`);
+}
+
+// Event Listeners für PDF Export beim Laden einrichten
+document.addEventListener('DOMContentLoaded', () => {
+    setupPDFExportListeners();
+    updatePDFExportUI(); // Initial hide PDF button if no missions
+});
