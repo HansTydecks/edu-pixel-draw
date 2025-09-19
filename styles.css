@@ -7,9 +7,9 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
     min-height: 100vh;
-    color: #333;
+    color: #e2e8f0;
 }
 
 .container {
@@ -22,22 +22,23 @@ body {
 header {
     text-align: center;
     margin-bottom: 20px;
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(45, 45, 94, 0.95);
     padding: 15px 20px;
     border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 header h1 {
     font-size: 1.75rem;
-    color: #4a5568;
+    color: #ffffff;
     margin-bottom: 8px;
 }
 
 header p {
     font-size: 1rem;
-    color: #718096;
+    color: #a0aec0;
     margin-bottom: 0;
 }
 
@@ -51,11 +52,12 @@ header p {
 
 /* Zeichenfläche */
 .drawing-area {
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(45, 45, 94, 0.95);
     padding: 20px;
     border-radius: 15px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .canvas-controls {
@@ -66,7 +68,7 @@ header p {
 }
 
 .canvas-controls h2 {
-    color: #4a5568;
+    color: #ffffff;
     font-size: 1.5rem;
     margin: 0;
 }
@@ -94,7 +96,7 @@ header p {
     border: 3px solid #4a5568;
     border-radius: 8px;
     cursor: crosshair;
-    background: white;
+    background: #1a1a2e;
     transition: all 0.5s ease; /* Sanfte Animation bei Größenänderung */
 }
 
@@ -116,14 +118,14 @@ header p {
     font-family: 'Courier New', monospace;
     font-weight: bold;
     font-size: 12px;
-    color: #2d3748;
-    background: rgba(255, 255, 255, 0.8);
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: #ffffff;
+    background: rgba(26, 26, 46, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .canvas-info {
     text-align: center;
-    color: #718096;
+    color: #a0aec0;
 }
 
 .canvas-info p {
@@ -132,15 +134,16 @@ header p {
 
 /* Farbpalette mit integriertem Radiergummi */
 .color-palette {
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(45, 45, 94, 0.95);
     padding: 20px;
     border-radius: 15px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .color-palette h2 {
-    color: #4a5568;
+    color: #ffffff;
     margin-bottom: 20px;
     font-size: 1.5rem;
 }
@@ -149,7 +152,7 @@ header p {
 .tool-section {
     margin-bottom: 20px;
     padding-bottom: 15px;
-    border-bottom: 2px solid #e2e8f0;
+    border-bottom: 2px solid #4a5568;
 }
 
 .tool-section .btn-eraser {
@@ -160,7 +163,7 @@ header p {
 
 /* Farben-Sektion */
 .colors-section h3 {
-    color: #4a5568;
+    color: #e2e8f0;
     margin-bottom: 15px;
     font-size: 1.2rem;
 }
@@ -189,13 +192,14 @@ header p {
 }
 
 .color-option:hover {
-    background: rgba(102, 126, 234, 0.1);
+    background: rgba(102, 126, 234, 0.2);
     transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
 .color-option.active {
-    background: rgba(102, 126, 234, 0.2);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    background: rgba(102, 126, 234, 0.3);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5);
 }
 
 .color-swatch {
@@ -208,7 +212,7 @@ header p {
 
 .color-option span {
     font-size: 9px;
-    color: #4a5568;
+    color: #a0aec0;
     text-align: center;
     line-height: 1.1;
 }
@@ -361,27 +365,29 @@ header p {
 
 /* Missionen */
 .missions {
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(45, 45, 94, 0.95);
     padding: 20px;
     border-radius: 15px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .missions h2 {
-    color: #4a5568;
+    color: #ffffff;
     margin-bottom: 15px;
     font-size: 1.5rem;
 }
 
 .mission-card {
-    background: linear-gradient(135deg, #ffeaa7, #fab1a0);
+    background: rgba(26, 26, 46, 0.9);
     padding: 20px;
     border-radius: 10px;
-    border-left: 5px solid #e17055;
+    border-left: 5px solid #63b3ed;
     margin-bottom: 15px;
     position: relative;
     overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Timer-Balken am oberen Rand der Missionsbox */
@@ -408,12 +414,12 @@ header p {
 }
 
 .mission-card h3 {
-    color: #2d3436;
+    color: #ffffff;
     margin-bottom: 10px;
 }
 
 .mission-card p {
-    color: #636e72;
+    color: #a0aec0;
     line-height: 1.5;
 }
 
@@ -440,10 +446,12 @@ header p {
 }
 
 .modal-content {
-    background: white;
+    background: rgba(45, 45, 94, 0.98);
     padding: 0;
     border-radius: 15px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
     max-width: 500px;
     width: 90%;
     max-height: 80vh;
@@ -456,7 +464,7 @@ header p {
 
 .modal-content.timer {
     border: 3px solid #f39c12;
-    background: linear-gradient(135deg, #fff3cd, #fef9e7);
+    background: linear-gradient(135deg, rgba(26, 26, 46, 0.95), rgba(22, 33, 62, 0.95));
 }
 
 .modal-content.error {
@@ -464,12 +472,13 @@ header p {
 }
 
 .modal-header {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: white;
+    background: rgba(45, 45, 94, 0.9);
+    color: #ffffff;
     padding: 20px;
     display: flex;
     align-items: center;
     gap: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .modal-header h3 {
@@ -495,12 +504,12 @@ header p {
 .modal-content.success .mascot {
     width: 135px; /* Größerer Kreis */
     height: 135px;
-    border: 5px solid white;
+    border: 5px solid #38a169;
     padding: 18px; /* Mehr Raum um das PNG */
-    background: white;
+    background: rgba(45, 45, 94, 0.9);
     object-fit: contain;
     object-position: center;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
     animation: celebrateSuccess 2s ease-in-out;
 }
 
@@ -508,12 +517,12 @@ header p {
 .modal:not(.analysis-modal):not(.feedback-modal) .mascot {
     width: 128px; /* Größerer Kreis */
     height: 128px;
-    border: 4px solid white;
+    border: 4px solid #4a5568;
     padding: 16px; /* Raum um das PNG */
-    background: white;
+    background: rgba(45, 45, 94, 0.9);
     object-fit: contain;
     object-position: center;
-    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.3);
     animation: gentle-pulse 3s ease-in-out infinite;
 }
 
@@ -524,7 +533,7 @@ header p {
 .modal-body p {
     margin-bottom: 15px;
     line-height: 1.6;
-    color: #4a5568;
+    color: #e2e8f0;
 }
 
 .quiz-options {
@@ -535,21 +544,22 @@ header p {
 
 .quiz-option {
     padding: 12px;
-    border: 2px solid #e2e8f0;
+    border: 2px solid #4a5568;
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
-    background: white;
+    background: rgba(45, 45, 94, 0.8);
+    color: #e2e8f0;
 }
 
 .quiz-option:hover {
     border-color: #667eea;
-    background: #f7fafc;
+    background: rgba(102, 126, 234, 0.1);
 }
 
 .quiz-option.selected {
     border-color: #667eea;
-    background: #edf2f7;
+    background: rgba(102, 126, 234, 0.2);
 }
 
 .quiz-input {
@@ -559,14 +569,17 @@ header p {
 .quiz-input input {
     width: 100%;
     padding: 12px;
-    border: 2px solid #e2e8f0;
+    border: 2px solid #4a5568;
     border-radius: 8px;
     font-size: 16px;
+    background: rgba(45, 45, 94, 0.8);
+    color: #e2e8f0;
 }
 
 .quiz-input input:focus {
     outline: none;
     border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
 }
 
 .modal-footer {
@@ -574,7 +587,8 @@ header p {
     display: flex;
     gap: 10px;
     justify-content: flex-end;
-    background: #f7fafc;
+    background: rgba(45, 45, 94, 0.9);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .hidden {
@@ -717,12 +731,12 @@ header p {
     max-width: 150px; /* Verhindere Ausdehnung */
     max-height: 150px; /* Verhindere Ausdehnung */
     border-radius: 50% !important; /* Erzwinge Kreisform */
-    border: 5px solid white;
+    border: 5px solid #4a5568;
     padding: 20px; /* Mehr Raum um das PNG */
-    background: white;
+    background: rgba(45, 45, 94, 0.9);
     object-fit: contain; /* Behält PNG-Proportionen */
     object-position: center;
-    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
     margin: 0 auto 20px auto;
     display: block;
     position: relative;
@@ -755,15 +769,19 @@ header p {
 .feedback-modal .modal-content {
     max-width: 450px;
     border: 3px solid #ed8936; /* Dunkelorange Border */
-    background: linear-gradient(135deg, #fff5f0, #fed7c3); /* Sanfter Orange-Gradient */
+    background: rgba(45, 45, 94, 0.98);
+    border-radius: 15px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(20px);
 }
 
 .feedback-modal .modal-header {
-    background: linear-gradient(45deg, #ed8936, #dd6b20);
-    color: white;
+    background: rgba(45, 45, 94, 0.9);
+    color: #ffffff;
     border-radius: 12px 12px 0 0;
     text-align: center;
     padding: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .feedback-modal .modal-header h3 {
@@ -775,24 +793,25 @@ header p {
 .feedback-modal .mascot {
     width: 135px; /* Größerer Kreis */
     height: 135px;
-    border: 5px solid white;
+    border: 5px solid #4a5568;
     padding: 18px; /* Raum um das PNG */
-    background: white;
+    background: rgba(45, 45, 94, 0.9);
     object-fit: contain;
     object-position: center;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
     margin: 0 auto;
     display: block;
 }
 
 .feedback-modal .modal-body {
     padding: 25px;
-    background: white;
+    background: rgba(45, 45, 94, 0.9);
     border-radius: 0 0 12px 12px;
+    color: #e2e8f0;
 }
 
 .feedback-modal .feedback-text {
-    color: #744210;
+    color: #e2e8f0;
     font-size: 16px;
     line-height: 1.6;
     text-align: center;
@@ -1136,11 +1155,11 @@ header p {
 }
 
 .modal-content.pdf-export .modal-header {
-    background: #f8f9fa;
-    color: #333;
+    background: rgba(45, 45, 94, 0.9);
+    color: #e2e8f0;
     padding: 20px;
     border-radius: 15px 15px 0 0;
-    border-bottom: 1px solid #e9ecef;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1161,19 +1180,19 @@ header p {
 }
 
 .pdf-info p {
-    color: #666;
+    color: #a0aec0;
     margin-bottom: 15px;
 }
 
 .missions-preview {
-    background: #f8f9fa;
+    background: rgba(45, 45, 94, 0.8);
     border-radius: 8px;
     padding: 15px;
-    border: 1px solid #e9ecef;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .missions-preview strong {
-    color: #333;
+    color: #e2e8f0;
 }
 
 .missions-list {
@@ -1194,10 +1213,10 @@ header p {
 .mission-thumbnail {
     width: 40px;
     height: 40px;
-    border: 1px solid #ddd;
+    border: 1px solid #4a5568;
     border-radius: 4px;
     margin-right: 12px;
-    background: #fff;
+    background: rgba(26, 26, 46, 0.8);
     image-rendering: pixelated;
 }
 
@@ -1207,18 +1226,18 @@ header p {
 
 .mission-title {
     font-weight: 600;
-    color: #333;
+    color: #e2e8f0;
     margin: 0 0 4px 0;
 }
 
 .mission-details {
     font-size: 12px;
-    color: #666;
+    color: #a0aec0;
     margin: 0;
 }
 
 .no-missions {
-    color: #999;
+    color: #718096;
     font-style: italic;
     text-align: center;
     margin: 10px 0;
@@ -1233,27 +1252,29 @@ header p {
 .name-input-section label {
     display: block;
     font-weight: 600;
-    color: #333;
+    color: #e2e8f0;
     margin-bottom: 8px;
 }
 
 .name-input-section input {
     width: 100%;
     padding: 12px;
-    border: 2px solid #e9ecef;
+    border: 2px solid #4a5568;
     border-radius: 8px;
     font-size: 16px;
     transition: border-color 0.3s ease;
+    background: rgba(45, 45, 94, 0.8);
+    color: #e2e8f0;
 }
 
 .name-input-section input:focus {
     outline: none;
-    border-color: #4CAF50;
-    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+    border-color: #63b3ed;
+    box-shadow: 0 0 0 3px rgba(99, 179, 237, 0.2);
 }
 
 .name-input-section input:valid {
-    border-color: #4CAF50;
+    border-color: #38a169;
 }
 
 /* Button States */
@@ -1314,4 +1335,39 @@ header p {
         padding: 12px;
         font-size: 16px;
     }
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    margin-top: 40px;
+    padding: 20px;
+    background: rgba(45, 45, 94, 0.9);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+footer .impressum {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+footer .impressum p {
+    color: #a0aec0;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+footer .impressum a {
+    color: #63b3ed;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+footer .impressum a:hover {
+    color: #4299e1;
+    text-decoration: underline;
 }
