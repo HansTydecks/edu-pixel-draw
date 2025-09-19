@@ -1,119 +1,116 @@
-# 🎨 Pixel & Bits Lernabenteuer
+# 🎨 Pixel & Bits Learning Adventure
 
-Eine interaktive Webanwendung für Schülerinnen und Schüler, um zu verstehen, wie Computer Bilder mit Bits und Bytes speichern.
+An interactive web app designed for students to explore how computers store images using bits and bytes. Dive into the fascinating world of digital art and data representation through hands-on drawing and quizzes!
 
-## 🌟 Features
+## 🌐 Live Demo
 
-### Interaktive Zeichenfläche
-- **8×8 Pixel Grid** als Startgröße
-- **Erweiterbar auf 16×16** durch Lösen von Quiz-Aufgaben
-- **Umschaltung zwischen Zeichen- und Bit-Ansicht**
-- Einfache Maus- und Touch-Bedienung
+Check out the live version here: [pixel.tinfo.space](https://pixel.tinfo.space)
 
-### Progressives Farbsystem
-- **Start mit 2 Farben** (Schwarz & Weiß, 1 Bit pro Pixel)
-- **Freischaltung von 4 Farben** (2 Bits pro Pixel)
-- **Freischaltung von 8 Farben** (3 Bits pro Pixel)
-- Visuelle Darstellung der Bit-Werte für jeden Pixel
+## ✨ Features
 
-### Lernorientierte Quiz-Aufgaben
-- **Fragen zur Bit-Tiefe**: Wie viele Bits für X Farben?
-- **Speicherberechnung**: Wie ändert sich der Speicherbedarf?
-- **Maskottchen-gestützte Hilfe** bei schwierigen Fragen
+### Interactive Drawing Canvas
+- Start with an **8×8 pixel grid** and expand to **16×16** by completing challenges
+- Toggle between **drawing view** and **bit view** to see the underlying data
+- Intuitive mouse and touch controls for easy interaction
 
-### Missionen & Aufgaben
-1. **Mission 1**: Erstes Herzchen (2 Farben, 8×8)
-2. **Mission 2**: Buntes Haus (4 Farben, 8×8)  
-3. **Mission 3**: Große Landschaft (8 Farben, 16×16)
+### Progressive Color System
+- Begin with **2 colors** (black & white, 1 bit per pixel)
+- Unlock **4 colors** (2 bits) and **8 colors** (3 bits) through quizzes
+- Visual bit representations help you understand the data behind each pixel
 
-## 🎯 Lernziele
+### Educational Quizzes
+- Questions about **bit depth**: How many bits for X colors?
+- Memory calculations: See how storage needs change
+- Helpful mascot guidance for tricky questions
 
-Schülerinnen und Schüler lernen:
-- Wie **Bits (0 und 1)** zur Datenspeicherung verwendet werden
-- Den Zusammenhang zwischen **Bit-Tiefe und Farbanzahl**
-- Wie sich **Speicherbedarf** mit Bildgröße und Farbtiefe ändert
-- Die **exponenzielle Beziehung** zwischen Bits und darstellbaren Zuständen
+### Missions & Challenges
+1. **Mission 1**: Draw your first heart (2 colors, 8×8)
+2. **Mission 2**: Colorful house (4 colors, 8×8)
+3. **Mission 3**: Expansive landscape (8 colors, 16×16)
 
-## 🚀 Nutzung
+## 🎯 Learning Objectives
 
-### Lokal testen
-1. Repository klonen
-2. `index.html` in einem Webbrowser öffnen
-3. Sofort loslegen!
+Through this app, students will discover:
+- How **bits (0s and 1s)** power data storage
+- The connection between **bit depth and color variety**
+- How **memory usage** scales with image size and color depth
+- The **exponential relationship** between bits and possible states
 
-### Live-Demo
-Die App ist über GitHub Pages verfügbar: [GitHub Pages Link]
+## 🚀 Getting Started
 
-## 🎨 Bedienung
+### Local Testing
+1. Clone this repository
+2. Open `index.html` in your web browser
+3. Start drawing and learning right away!
 
-### Zeichnen
-- **Klicken/Tippen** auf die Zeichenfläche zum Malen
-- **Farbe auswählen** aus der Palette rechts
-- **Gesperrte Farben** durch Quiz-Lösung freischalten
+### Controls
+- **Click/Tap** on the canvas to paint
+- **Select colors** from the palette on the right
+- **Unlock colors** by solving quizzes
 
-### Ansicht wechseln
-- **"Bit-Ansicht"** Button: Zeigt Bit-Werte statt Farben
-- **"Zeichen-Ansicht"** Button: Zurück zur normalen Farbansicht
+### View Modes
+- **Bit View Button**: Reveals the binary values instead of colors
+- **Drawing View Button**: Back to colorful mode
 
-### Tastatur-Shortcuts
-- **C**: Canvas löschen
-- **B**: Zwischen Bit- und Zeichen-Ansicht wechseln
-- **1-8**: Direkte Farbauswahl (falls freigeschaltet)
+### Keyboard Shortcuts
+- **C**: Clear the canvas
+- **B**: Switch between bit and drawing views
+- **1-8**: Quick color selection (when unlocked)
 
-## 🛠️ Technische Details
+## 🛠️ Technical Details
 
-### Aufbau
-- **Vanilla JavaScript** - Keine Frameworks für maximale Kompatibilität
-- **HTML5 Canvas** für die Zeichenfläche
-- **Responsive CSS** für verschiedene Bildschirmgrößen
-- **Progressive Web App** Eigenschaften
+### Built With
+- **Vanilla JavaScript** for maximum compatibility
+- **HTML5 Canvas** for the drawing area
+- **Responsive CSS** for all screen sizes
+- **Progressive Web App** features
 
-### Browser-Kompatibilität
-- Chrome/Edge (Empfohlen)
+### Browser Support
+- Chrome/Edge (recommended)
 - Firefox
 - Safari
-- Mobile Browser (iOS/Android)
+- Mobile browsers (iOS/Android)
 
-### Datenspeicherung
-- Pixel-Daten im Browser-Speicher
-- Kein Server erforderlich
-- Vollständig offline nutzbar
+### Data Storage
+- Pixel data stored in browser memory
+- No server required
+- Fully offline capable
 
-## 📱 Mobile Optimierung
+## 📱 Mobile Optimization
 
-- **Touch-freundliche** Bedienung
-- **Responsive Layout** für Tablets und Smartphones
-- **Optimierte Schriftgrößen** in der Bit-Ansicht
+- **Touch-friendly** interface
+- **Responsive design** for tablets and phones
+- **Optimized fonts** in bit view for readability
 
-## 🎓 Pädagogisches Konzept
+## 🎓 Educational Approach
 
-### Konstruktivistischer Ansatz
-Schüler entdecken selbst die Zusammenhänge durch:
-- **Praktisches Ausprobieren** der Zeichenfunktionen
-- **Problemlösung** bei Quiz-Aufgaben
-- **Schrittweise Erweiterung** der Möglichkeiten
+### Constructivist Learning
+Students explore concepts through:
+- **Hands-on experimentation** with drawing tools
+- **Problem-solving** in quizzes
+- **Gradual complexity** increases
 
-### Scaffolding
-- **Einfacher Einstieg** mit nur zwei Farben
-- **Graduell steigende Komplexität**
-- **Hilfestellungen** durch das Maskottchen
+### Scaffolding Support
+- **Simple start** with just two colors
+- **Step-by-step** progression
+- **Mascot assistance** for guidance
 
-### Gamification-Elemente
-- **Missionen** mit klaren Zielen
-- **Freischaltbares Content** als Belohnung
-- **Visuelle Erfolgs-Meldungen**
+### Gamification Elements
+- **Clear mission goals**
+- **Unlockable content** as rewards
+- **Visual success feedback**
 
-## 🔧 Anpassungen & Erweiterungen
+## 🔧 Customization & Extensions
 
-### Neue Missionen hinzufügen
-Editiere die `missions` Array in `script.js`:
+### Adding New Missions
+Edit the `missions` array in `script.js`:
 
 ```javascript
 const missions = [
     {
         id: 4,
-        title: "Mission 4: Dein Titel",
-        description: "Deine Beschreibung...",
+        title: "Mission 4: Your Title",
+        description: "Your description...",
         requiredColors: 8,
         requiredSize: 16,
         completed: false
@@ -121,38 +118,38 @@ const missions = [
 ];
 ```
 
-### Neue Quiz-Fragen
-Erweitere die `quizzes` Object in `script.js`:
+### Adding New Quizzes
+Expand the `quizzes` object in `script.js`:
 
 ```javascript
 const quizzes = {
     newQuizType: [
         {
-            question: "Deine Frage?",
-            type: "multiple", // oder "input"
+            question: "Your question?",
+            type: "multiple", // or "input"
             options: ["Option 1", "Option 2"],
             correct: 0,
-            explanation: "Deine Erklärung..."
+            explanation: "Your explanation..."
         }
     ]
 };
 ```
 
-## 📄 Lizenz
+## 🤝 Contributing
 
-MIT License - Frei verwendbar für Bildungszwecke
+We welcome improvements and extensions! 
+- Open issues for bugs or feature requests
+- Submit pull requests for code contributions
+- Feedback from educators is especially valuable
 
-## 🤝 Beitrag
+## 📄 License
 
-Verbesserungen und Erweiterungen sind willkommen! 
-- Issues für Bugs oder Feature-Requests
-- Pull Requests für Code-Beiträge
-- Feedback von Lehrkräften besonders wertvoll
+MIT License - Free for educational use
 
-## 📞 Kontakt
+## 📞 Contact
 
-Bei Fragen zur pädagogischen Nutzung oder technischen Problemen, erstelle gerne ein Issue in diesem Repository.
+For questions about educational use or technical issues, feel free to create an issue in this repository.
 
 ---
 
-**Entwickelt mit ❤️ für das digitale Lernen**
+**Developed with ❤️ for digital learning**
